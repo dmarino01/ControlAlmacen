@@ -30,7 +30,12 @@
               
             ] }'>
                 {{ item.nombre }}
+                
             </div>
+                Puertas del Almacen '{{ item.nombre }}'
+                {% for puerta in item.puertas %}
+                <br>{{ puerta.nombre }} - {{ puerta.estado.descripcion }} - {{ puerta.contrato.cliente.nombre }}
+                {% endfor %}
             {% endfor %}
             {% endfor %}
 

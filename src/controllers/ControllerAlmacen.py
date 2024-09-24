@@ -1,5 +1,4 @@
-from models.Almacen import Almacen
-from sqlalchemy.orm import joinedload
+from models import Almacen
 
 class ControllerAlmacen:
 

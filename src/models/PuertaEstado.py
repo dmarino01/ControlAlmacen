@@ -1,5 +1,4 @@
 from db import db
-from models.Puerta import Puerta
 
 class PuertaEstado(db.Model):
     __tablename__ = 'puerta_estados'
@@ -8,7 +7,7 @@ class PuertaEstado(db.Model):
     descripcion = db.Column(db.String(50))
 
     #Relationships
-    puertas = db.relationship(Puerta, backref='PuertaEstado', lazy=True)
+    puertas = db.relationship('Puerta', back_populates='estado', lazy=True)
 
     def __repr__(self):
         return (

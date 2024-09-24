@@ -1,5 +1,4 @@
 from db import db
-from models.Contrato import Contrato
 
 class Puerta(db.Model):
     __tablename__ = 'puertas'
@@ -10,12 +9,14 @@ class Puerta(db.Model):
     almacen_id = db.Column(db.Integer, db.ForeignKey('almacenes.id'))
 
     #Relationships
-    contratos = db.relationship(Contrato, backref='Puerta', lazy=True)
+    estado = db.relationship('PuertaEstado', back_populates='puertas') 
+    contrato = db.relationship('Contrato', back_populates='puerta', lazy=True, uselist=False)
 
     def __repr__(self):
         return (
             f"<Puerta id={self.id}, "
             f"nombre={self.nombre}, "
             f"estado_id={self.estado_id}, "
-            f"almacen_id={self.almacen_id}>"
+            f"almacen_id={self.almacen_id},"
+            f"contrato={self.contrato}>"
         )
