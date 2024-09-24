@@ -8,3 +8,12 @@ class Contrato(db.Model):
     puerta_id = db.Column(db.Integer, db.ForeignKey('puertas.id'))
     fecha_inicio = db.Column(db.Date)
     fecha_final = db.Column(db.Date)
+
+    def __repr__(self):
+        return (
+            f"<Contrato id={self.id}, "
+            f"cliente_id={self.cliente_id}, "
+            f"puerta_id={self.puerta_id}, "
+            f"fecha_inicio={self.fecha_inicio}, "
+            f"fecha_final={self.fecha_final}>"
+        )

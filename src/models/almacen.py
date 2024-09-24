@@ -11,3 +11,10 @@ class Almacen(db.Model):
     #Relationships
     almacen_css_detalles = db.relationship(AlmacenCSSDetalles, backref='Almacen', lazy=True)
     puertas = db.relationship(Puerta, backref='Almacen', lazy=True)
+
+    def __repr__(self):
+        return (
+            f"<Almacen id={self.id}, "
+            f"nombre={self.nombre}, "
+            f"puertas={self.puertas}>"
+        )

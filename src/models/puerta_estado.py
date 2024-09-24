@@ -9,3 +9,9 @@ class PuertaEstado(db.Model):
 
     #Relationships
     puertas = db.relationship(Puerta, backref='PuertaEstado', lazy=True)
+
+    def __repr__(self):
+        return (
+            f"<PuertaEstado id={self.id}, "
+            f"descripcion={self.descripcion}>"
+        )

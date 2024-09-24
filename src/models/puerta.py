@@ -11,3 +11,11 @@ class Puerta(db.Model):
 
     #Relationships
     contratos = db.relationship(Contrato, backref='Puerta', lazy=True)
+
+    def __repr__(self):
+        return (
+            f"<Puerta id={self.id}, "
+            f"nombre={self.nombre}, "
+            f"estado_id={self.estado_id}, "
+            f"almacen_id={self.almacen_id}>"
+        )
