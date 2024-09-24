@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Mandos de Almacenes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+
+    </style>
+</head>
+<body>
+    <h1>Panel de Mandos de Almacenes</h1>
+    <div class="warehouse-map">
+        <div>
+            <img src="{{ url_for('static', filename='assets/Base_moche.png') }}" alt="Plano de Almacenes" style="width: 150%; height: 150%;">
+        </div>
+        <div>
+            <!-- Agrega tus celdas aquí -->
+            <div class="cell G1" data-info='{"Celda": "G1", "Estado": "Libre", "Cliente": "Danper", "Duración": "12 meses", "Vencimiento": "2025-01-01"}'>
+                G1
+            </div>
+            <div class="cell G2" data-info='{"Celda": "G2", "Estado": "Ocupado", "Cliente": "Cliente 2", "Duración": "6 meses", "Vencimiento": "2024-06-01"}'>
+                G2
+            </div>
+            <div class="cell G3" data-info='{"Celda": "G3", "Estado": "Ocupado", "Cliente": "Cliente 3", "Duración": "8 meses", "Vencimiento": "2024-03-01"}'>
+                G3
+            </div>
+            <div class="cell G4" data-info='{"Celda": "G4", "Estado": "Ocupado", "Cliente": "Cliente 3", "Duración": "8 meses", "Vencimiento": "2024-03-01"}'>
+                G4
+            </div>
+            <div class="cell G5" data-info='{"Celda": "G5", "Estado": "Ocupado", "Cliente": "Cliente 3", "Duración": "8 meses", "Vencimiento": "2024-03-01"}'>
+                G5
+            </div>
+            <div class="cell G6" data-info='{"Celda": "G5", "Estado": "Ocupado", "Cliente": "Cliente 3", "Duración": "8 meses", "Vencimiento": "2024-03-01"}'>
+                G6
+            </div>
+            <div class="cell G7" data-info='{"Celda": "G7", "Estado": "Ocupado", "Cliente": "Cliente 3", "Duración": "8 meses", "Vencimiento": "2024-03-01"}'>
+                G7
+            </div>
+        </div>
+        <!-- Agrega más celdas según sea necesario -->
+    </div>
+    
+    <div class="info-box" id="info-box"></div>
+
+    <script>
+        const infoBox = document.getElementById('info-box');
+
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('mouseover', function(event) {
+                const info = JSON.parse(this.getAttribute('data-info'));
+                infoBox.innerHTML = `
+                    <h4>Detalles para ${info.Celda}</h4>
+                    <p>Estado: ${info.Estado}</p>
+                    <p>Cliente: ${info.Cliente}</p>
+                    <p>Duración: ${info.Duración}</p>
+                    <p>Vencimiento: ${info.Vencimiento}</p>
+                `;
+                infoBox.style.display = 'block';
+            });
+
+            cell.addEventListener('mousemove', function(event) {
+                // Adjust the position of the info-box relative to the cursor
+                infoBox.style.left = event.pageX + 15 + 'px';
+                infoBox.style.top = event.pageY + 15 + 'px';
+            });
+
+            cell.addEventListener('mouseout', function() {
+                infoBox.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
