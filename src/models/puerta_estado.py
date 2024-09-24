@@ -1,4 +1,5 @@
 from db import db
+from models.Puerta import Puerta
 
 class PuertaEstado(db.Model):
     __tablename__ = 'puerta_estados'
@@ -6,5 +7,5 @@ class PuertaEstado(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     descripcion = db.Column(db.String(50))
 
-    # Relationships
-    puertas = db.relationship('Puerta', backref='estado', lazy=True)
+    #Relationships
+    puertas = db.relationship(Puerta, backref='PuertaEstado', lazy=True)

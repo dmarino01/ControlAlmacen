@@ -10,5 +10,3 @@ class AlmacenCSSDetalles(db.Model):
     height = db.Column(db.Integer)
     color = db.Column(db.String(20))
     almacen_id = db.Column(db.Integer, db.ForeignKey('almacenes.id'))
-
-    almacen = db.relationship('Almacen', backref=db.backref('css_detalles', lazy=True))

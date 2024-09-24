@@ -2,21 +2,22 @@ from flask import Flask, render_template, abort
 from config import Config, csrf
 from db import db
 
+from controllers.ControllerAlmacen import ControllerAlmacen
+
+from blueprints.almacen_blueprint import almacen_bp
+
 app = Flask(__name__)
 
 app.config.from_object(Config)
 
 db.init_app(app)
 
-from models.puerta import Puerta
-from models.almacen import Almacen
-from models.almacen_css_detalles import AlmacenCSSDetalles
-from models.puerta_estado import PuertaEstado
-from models.cliente import Cliente
+app.register_blueprint(almacen_bp)
 
 @app.route('/')
 def index():
-    almacenes = Almacen.query.all()
+    almacenes = ControllerAlmacen.getAlmacenes()
+    print(almacenes)
     return render_template('index.html', almacenes=almacenes)
 
 @app.errorhandler(404)
@@ -37,4 +38,4 @@ def trigger_error():
 
 if __name__ == '__main__':
     csrf.init_app(app)
-    app.run(debug=True)
+    app.run()
