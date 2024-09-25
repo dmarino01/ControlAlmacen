@@ -11,6 +11,7 @@ class Puerta(db.Model):
     #Relationships
     estado = db.relationship('PuertaEstado', back_populates='puertas') 
     contrato = db.relationship('Contrato', back_populates='puerta', lazy=True, uselist=False)
+    almacen = db.relationship('Almacen', back_populates='puertas', lazy=True)
 
     def __repr__(self):
         return (

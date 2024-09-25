@@ -4,33 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de Almacenes</title>
+    <title>MAPA DE ALMACENES</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
-    <h1>Mapa de Almacenes</h1>
+    <h1>MAPA DE ALMACENES</h1>
     <div class="warehouse-map">
         <div>
             <img src="{{ url_for('static', filename='assets/Base_moche.png') }}" alt="Plano de Almacenes"
                 style="width: 150%; height: 150%;">
         </div>
         <div>
-            <!-- Agrega tus celdas aquí -->
             {% for item in almacenes %}
-            {% for css in item.almacen_css_detalles %}
+            {% for css in item.almacenCSSDetalles %}
             <div class="cell"
                 style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px; background-color: {{ css.color }};"
                 onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
                 {{ item.nombre }}
             </div>
-
-            <!-- El div para mostrar la información de las puertas -->
             <div class="info-box" id="info-box-{{ item.id }}"
                 style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
                 Puertas del Almacén '{{ item.nombre }}'
@@ -54,12 +52,51 @@
                 G2
             </div>
         </div>
-        <!-- Agrega más celdas según sea necesario -->
+        <div>
+            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#almacenModal">
+                <i class="fa fa-plus"></i> AGREGAR NUEVO ALMACEN
+            </button>
+        </div>
+
     </div>
 
-    <div class="info-box" id="info-box"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="almacenModal" tabindex="-1" aria-labelledby="almacenModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="almacenModalLabel">AGREGAR NUEVO ALMACÉN</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario dentro del modal -->
+                    <form id="almacenForm">
+                        <div class="mb-3">
+                            <label for="nombreAlmacen" class="form-label">Nombre del Almacén</label>
+                            <input type="text" class="form-control" id="nombreAlmacen" name="nombreAlmacen" required>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" form="almacenForm"><i class="fa fa-save"></i> Guardar Almacén</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+        const modalAlmacen = document.getElementById('almacenModal');
+    const almacenModal = new bootstrap.Modal(modalAlmacen);
+    
+    modalAlmacen.addEventListener('hide.bs.modal', function (event) {
+        const confirmClose = confirm('¿Estás seguro de que deseas cerrar el formulario? Se perderán los datos no guardados.');
+        if (!confirmClose) {
+            event.preventDefault();  // Evita que el modal se cierre si el usuario cancela
+        }
+    });
+    
         function showInfo(id) {
             document.getElementById('info-box-' + id).style.display = 'block';
         }
@@ -67,7 +104,6 @@
         function hideInfo(id) {
             document.getElementById('info-box-' + id).style.display = 'none';
         }
-
     </script>
 </body>
 
