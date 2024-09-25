@@ -26,16 +26,22 @@
             {% for css in item.almacen_css_detalles %}
             <div class="cell"
                 style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px; background-color: {{ css.color }};"
-                data-info='{"id": {{ item.id }}, "nombre": "{{ item.nombre }}", "puertas": [
-              
-            ] }'>
+                onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
                 {{ item.nombre }}
-                
             </div>
-                Puertas del Almacen '{{ item.nombre }}'
-                {% for puerta in item.puertas %}
-                <br>{{ puerta.nombre }} - {{ puerta.estado.descripcion }} - {{ puerta.contrato.cliente.nombre }}
-                {% endfor %}
+
+            <!-- El div para mostrar la información de las puertas -->
+            <div class="info-box" id="info-box-{{ item.id }}"
+                style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
+                Puertas del Almacén '{{ item.nombre }}'
+                <div class="info-content">
+                    {% for puerta in item.puertas %}
+                    <div class="info-item">
+                        {{ puerta.nombre }} - {{ puerta.estado.descripcion }} - {{ puerta.contrato.cliente.nombre }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
             {% endfor %}
             {% endfor %}
 
@@ -54,30 +60,14 @@
     <div class="info-box" id="info-box"></div>
 
     <script>
-        const infoBox = document.getElementById('info-box');
+        function showInfo(id) {
+            document.getElementById('info-box-' + id).style.display = 'block';
+        }
 
-        document.querySelectorAll('.cell').forEach(cell => {
-            cell.addEventListener('mouseover', function () {
-                const info = JSON.parse(this.getAttribute('data-info'));
+        function hideInfo(id) {
+            document.getElementById('info-box-' + id).style.display = 'none';
+        }
 
-
-                infoBox.innerHTML = `
-                <h4>Puertas en Almacen: ${info.nombre} (${info.id})</h4>
-              
-            `;
-                infoBox.style.display = 'block';
-            });
-
-            cell.addEventListener('mousemove', function(event) {
-                // Adjust the position of the info-box relative to the cursor
-                infoBox.style.left = event.pageX + 15 + 'px';
-                infoBox.style.top = event.pageY + 15 + 'px';
-            });
-
-            cell.addEventListener('mouseout', function() {
-                infoBox.style.display = 'none';
-            });
-        });
     </script>
 </body>
 

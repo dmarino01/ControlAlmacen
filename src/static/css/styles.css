@@ -1,19 +1,27 @@
 /* styles.css */
 .warehouse-map {
     position: relative;
-    width: 800px; /* Ajusta el tamaño según sea necesario */
-    height: 600px; /* Ajusta el tamaño según sea necesario */
+    width: 800px;
+    height: 600px;
 }
 
 .info-box {
-    position: absolute;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid #ccc;
-    margin-top: 20px;
     padding: 10px;
-    border-radius: 5px;
-    display: none; /* Initially hidden */
-    pointer-events: none; /* Prevent interaction with the box */
+    z-index: 100;
+}
+
+.info-content {
+    display: block;
+}
+
+.info-item {
+    display: block;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cell {
@@ -28,10 +36,6 @@
     font-weight: bold;
     cursor: pointer;
     text-align: center;
-}
-
-.cell:hover {
-    opacity: 0.7;
 }
 
 .cell.G1 {
