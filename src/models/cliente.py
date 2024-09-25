@@ -1,5 +1,4 @@
 from db import db
-from models.Contrato import Contrato
 
 class Cliente(db.Model):
     __tablename__ = 'clientes'
@@ -9,13 +8,13 @@ class Cliente(db.Model):
     contacto = db.Column(db.String(100))
 
     #Relationships
-    contratos = db.relationship(Contrato, back_populates='cliente', lazy=True)
+    contratos = db.relationship('Contrato', back_populates='cliente', lazy=True)
 
     def __repr__(self):
         return (
             f"<Cliente id={self.id}, "
             f"nombre={self.nombre}, "
             f"contacto={self.contacto}, "
-            f"contratos={self.contractos}>"
+            f"contratos={self.contratos}>"
         )
 

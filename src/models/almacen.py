@@ -14,6 +14,6 @@ class Almacen(db.Model):
         return (
             f"<Almacen id={self.id}, "
             f"nombre={self.nombre}, "
-            f"detalles={self.almacenCSSDetalles}>"
+            f"detalles={self.almacenCSSDetalles}, "
             f"puertas={self.puertas}>"
         )

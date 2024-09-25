@@ -9,7 +9,7 @@ class Contrato(db.Model):
     fecha_inicio = db.Column(db.Date)
     fecha_final = db.Column(db.Date)
 
-    cliente = db.relationship('Cliente', back_populates='contratos')
+    cliente = db.relationship('Cliente', back_populates='contratos', lazy=True)
     puerta = db.relationship('Puerta', back_populates='contrato')
     
     def __repr__(self):

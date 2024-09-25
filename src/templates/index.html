@@ -35,14 +35,18 @@
                 <div class="info-content">
                     {% for puerta in item.puertas %}
                     <div class="info-item">
-                        {{ puerta.nombre }} - {{ puerta.estado.descripcion }} - {{ puerta.contrato.cliente.nombre }}
+                        {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
+                        {% if puerta.contrato %}
+                        - {{ puerta.contrato.cliente.nombre }}
+                        {% else %}
+                        - SIN CLIENTE
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
             </div>
             {% endfor %}
             {% endfor %}
-
             <div class="cell G1"
                 data-info='{"Celda": "G1", "Estado": "Libre", "Cliente": "Danper", "Duración": "12 meses", "Vencimiento": "2025-01-01"}'>
                 G1
@@ -55,6 +59,9 @@
         <div>
             <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#almacenModal">
                 <i class="fa fa-plus"></i> AGREGAR NUEVO ALMACEN
+            </button><br>
+            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#clienteModal">
+                <i class="fa fa-plus"></i> AGREGAR NUEVO CLIENTE
             </button>
         </div>
 

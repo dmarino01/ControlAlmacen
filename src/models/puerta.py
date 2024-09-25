@@ -18,6 +18,6 @@ class Puerta(db.Model):
             f"<Puerta id={self.id}, "
             f"nombre={self.nombre}, "
             f"estado_id={self.estado_id}, "
-            f"almacen_id={self.almacen_id},"
+            f"almacen_id={self.almacen_id}, "
             f"contrato={self.contrato}>"
         )
