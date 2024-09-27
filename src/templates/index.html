@@ -1,164 +1,165 @@
 {% extends "layout.html" %}
 
+{% block title %} Mapa de Almacenes {% endblock title %}
+
 {% block content %}
 <h1 class="mt-4">Mapa de Almacenes</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">Base Moche</li>
 </ol>
-<div class="row">
-    <div class="warehouse-map">
-        <div>
-            <img src="{{ url_for('static', filename='assets/Base_moche.png') }}" alt="Plano de Almacenes"
-                style="width: 150%; height: 150%;">
-        </div>
-        <div>
-            {% for item in almacenes %}
-            {% for css in item.almacenCSSDetalles %}
-            <div class="cell"
-                style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px; background-color: {{ css.color }};"
-                onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
-                {{ item.nombre }}
-            </div>
-            <div class="info-box" id="info-box-{{ item.id }}"
-                style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
-                Puertas del Almacén '{{ item.nombre }}'
-                <div class="info-content">
-                    {% for puerta in item.puertas %}
-                    <div class="info-item">
-                        {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
-                        {% if puerta.contrato %}
-                        - {{ puerta.contrato.cliente.nombre }}
-                        {% else %}
-                        - SIN CLIENTE
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-            {% endfor %}
-            <div class="cell G1"
-                data-info='{"Celda": "G1", "Estado": "Libre", "Cliente": "Danper", "Duración": "12 meses", "Vencimiento": "2025-01-01"}'>
-                G1
-            </div>
-            <div class="cell G2"
-                data-info='{"Celda": "G2", "Estado": "Ocupado", "Cliente": "Cliente 2", "Duración": "6 meses", "Vencimiento": "2024-06-01"}'>
-                G2
-            </div>
-        </div>
-        <div>
-            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#almacenModal">
-                <i class="fa fa-plus"></i> AGREGAR NUEVO ALMACEN
-            </button><br>
-            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#clienteModal">
-                <i class="fa fa-plus"></i> AGREGAR NUEVO CLIENTE
-            </button>
-        </div>
 
+<div class="warehouse-map">
+    <div>
+        <img src="{{ url_for('static', filename='assets/Base_moche.png') }}" alt="Plano de Almacenes"
+            style="width: 150%; height: 150%;">
+    </div>
+    <div>
+        {% for item in almacenes %}
+        {% for css in item.almacenCSSDetalles %}
+        <div class="cell"
+            style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px; background-color: {{ css.color }};"
+            onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
+            {{ item.nombre }}
+        </div>
+        <div class="info-box" id="info-box-{{ item.id }}"
+            style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
+            Puertas del Almacén '{{ item.nombre }}'
+            <div class="info-content">
+                {% for puerta in item.puertas %}
+                <div class="info-item">
+                    {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
+                    {% if puerta.contrato %}
+                    - {{ puerta.contrato.cliente.nombre }}
+                    {% else %}
+                    - SIN CLIENTE
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endfor %}
+        <div class="cell G1"
+            data-info='{"Celda": "G1", "Estado": "Libre", "Cliente": "Danper", "Duración": "12 meses", "Vencimiento": "2025-01-01"}'>
+            G1
+        </div>
+        <div class="cell G2"
+            data-info='{"Celda": "G2", "Estado": "Ocupado", "Cliente": "Cliente 2", "Duración": "6 meses", "Vencimiento": "2024-06-01"}'>
+            G2
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#almacenModal">
+            <i class="fa fa-plus"></i> AGREGAR NUEVO ALMACEN
+        </button><br>
+        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#clienteModal">
+            <i class="fa fa-plus"></i> AGREGAR NUEVO CLIENTE
+        </button>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="almacenModal" tabindex="-1" aria-labelledby="almacenModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="almacenModalLabel">AGREGAR NUEVO ALMACÉN</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Formulario dentro del modal -->
-                    <form id="almacenForm">
-                        <div class="mb-3">
-                            <label for="nombreAlmacen" class="form-label">Nombre del Almacén</label>
-                            <input type="text" class="form-control" id="nombreAlmacen" name="nombreAlmacen" required>
-                        </div>
+</div>
 
-                        <!-- Sección de Puertas -->
-                        <div class="accordion mb-3" id="accordionPuertas">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingPuerta">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapsePuerta" aria-expanded="true"
-                                        aria-controls="collapsePuerta">
-                                        Puerta
-                                    </button>
-                                </h2>
-                                <div id="collapsePuerta" class="accordion-collapse collapse show"
-                                    aria-labelledby="headingPuerta" data-bs-parent="#accordionPuertas">
-                                    <div class="accordion-body">
-                                        <div class="mb-3">
-                                            <label for="nombrePuerta" class="form-label">Nombre de la Puerta</label>
-                                            <input type="text" class="form-control" id="nombrePuerta"
-                                                name="nombrePuerta">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="estadoPuerta" class="form-label">Estado de la Puerta</label>
-                                            <select class="form-control" id="estadoPuerta" name="estadoPuerta">
-                                                <option value="disponible">Disponible</option>
-                                                <option value="alquilado">Alquilado</option>
-                                            </select>
-                                        </div>
-                                        <button type="button" class="btn btn-primary" id="agregarPuerta">Agregar
-                                            Puerta</button>
+<!-- Modal -->
+<div class="modal fade" id="almacenModal" tabindex="-1" aria-labelledby="almacenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="almacenModalLabel">AGREGAR NUEVO ALMACÉN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario dentro del modal -->
+                <form id="almacenForm">
+                    <div class="mb-3">
+                        <label for="nombreAlmacen" class="form-label">Nombre del Almacén</label>
+                        <input type="text" class="form-control" id="nombreAlmacen" name="nombreAlmacen" required>
+                    </div>
+
+                    <!-- Sección de Puertas -->
+                    <div class="accordion mb-3" id="accordionPuertas">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPuerta">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePuerta" aria-expanded="true"
+                                    aria-controls="collapsePuerta">
+                                    Puerta
+                                </button>
+                            </h2>
+                            <div id="collapsePuerta" class="accordion-collapse collapse show"
+                                aria-labelledby="headingPuerta" data-bs-parent="#accordionPuertas">
+                                <div class="accordion-body">
+                                    <div class="mb-3">
+                                        <label for="nombrePuerta" class="form-label">Nombre de la Puerta</label>
+                                        <input type="text" class="form-control" id="nombrePuerta" name="nombrePuerta">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="estadoPuerta" class="form-label">Estado de la Puerta</label>
+                                        <select class="form-control" id="estadoPuerta" name="estadoPuerta">
+                                            <option value="disponible">Disponible</option>
+                                            <option value="alquilado">Alquilado</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="agregarPuerta">Agregar
+                                        Puerta</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de puertas agregadas -->
+                    <h5 class="mt-4">Puertas Agregadas:</h5>
+                    <ul id="listaPuertas" class="list-group"></ul>
+
+                    <!-- Sección de Detalles CSS -->
+                    <div class="accordion mb-3" id="accordionCSS">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingCSS">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseCSS" aria-expanded="true" aria-controls="collapseCSS">
+                                    Detalles CSS
+                                </button>
+                            </h2>
+                            <div id="collapseCSS" class="accordion-collapse collapse show" aria-labelledby="headingCSS"
+                                data-bs-parent="#accordionCSS">
+                                <div class="accordion-body">
+                                    <div class="mb-3">
+                                        <label for="top" class="form-label">Posición Superior (px)</label>
+                                        <input type="number" class="form-control" id="top" name="top">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="leftPos" class="form-label">Posición Izquierda (px)</label>
+                                        <input type="number" class="form-control" id="leftPos" name="leftPos">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="width" class="form-label">Ancho (px)</label>
+                                        <input type="number" class="form-control" id="width" name="width">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="height" class="form-label">Altura (px)</label>
+                                        <input type="number" class="form-control" id="height" name="height">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="color" class="form-label">Color</label>
+                                        <input type="text" class="form-control" id="color" name="color">
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Lista de puertas agregadas -->
-                        <h5 class="mt-4">Puertas Agregadas:</h5>
-                        <ul id="listaPuertas" class="list-group"></ul>
-
-                        <!-- Sección de Detalles CSS -->
-                        <div class="accordion mb-3" id="accordionCSS">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingCSS">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseCSS" aria-expanded="true" aria-controls="collapseCSS">
-                                        Detalles CSS
-                                    </button>
-                                </h2>
-                                <div id="collapseCSS" class="accordion-collapse collapse show"
-                                    aria-labelledby="headingCSS" data-bs-parent="#accordionCSS">
-                                    <div class="accordion-body">
-                                        <div class="mb-3">
-                                            <label for="top" class="form-label">Posición Superior (px)</label>
-                                            <input type="number" class="form-control" id="top" name="top">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="leftPos" class="form-label">Posición Izquierda (px)</label>
-                                            <input type="number" class="form-control" id="leftPos" name="leftPos">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="width" class="form-label">Ancho (px)</label>
-                                            <input type="number" class="form-control" id="width" name="width">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="height" class="form-label">Altura (px)</label>
-                                            <input type="number" class="form-control" id="height" name="height">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="color" class="form-label">Color</label>
-                                            <input type="text" class="form-control" id="color" name="color">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="guardarAlmacen"><i class="fa fa-save"></i> Guardar
-                        Almacén</button>
-                </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarAlmacen"><i class="fa fa-save"></i> Guardar
+                    Almacén</button>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-{% block customJS %}
 
+{% endblock content %}
+
+{% block customJS %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const agregarPuertaBtn = document.getElementById('agregarPuerta');
@@ -209,5 +210,4 @@
         document.getElementById('info-box-' + id).style.display = 'none';
     }
 </script>
-
-{% endblock %}
+{% endblock customJS %}
