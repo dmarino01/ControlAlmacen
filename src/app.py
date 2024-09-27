@@ -15,6 +15,7 @@ db.init_app(app)
 app.register_blueprint(almacen_bp)
 
 @app.route('/')
+@app.route('/index')
 def index():
     almacenes = ControllerAlmacen.getAlmacenes()
     return render_template('index.html', almacenes=almacenes)

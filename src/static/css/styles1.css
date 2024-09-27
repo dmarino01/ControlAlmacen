@@ -1,0 +1,95 @@
+/* styles.css */
+.warehouse-map {
+    position: relative;
+    width: 800px;
+    height: 600px;
+}
+
+.info-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 100;
+}
+
+.info-content {
+    display: block;
+}
+
+.info-item {
+    display: block;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cell {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+.cell.G1 {
+    width: 72px;
+    height: 48px;
+    top: 98px; 
+    left: 218px;
+    background-color: rgba(0, 255, 0, 0.8);
+}
+
+.cell.G2 {
+    width: 61px;
+    height: 118px;
+    top: 9px;
+    left: 493px;
+    background-color: rgba(255, 0, 0, 0.8);
+}
+
+.cell.G3 {
+    width: 70px;
+    height: 48px;
+    top: 148px;
+    left: 296px;
+    background-color: rgba(0, 0, 255, 0.8);
+}
+
+.cell.G4 {
+    width: 70px;
+    height: 48px;
+    top: 148px;
+    left: 368px;
+    background-color: rgba(0, 0, 255, 0.8);
+}
+
+.cell.G5 {
+    width: 50px;
+    height: 60px;
+    top: 230px;
+    left: 158px;
+    background-color: rgba(0, 0, 255, 0.8);
+}
+
+.cell.G6 {
+    width: 86px;
+    height: 60px;
+    top: 230px;
+    left: 211px;
+    background-color: rgba(0, 0, 255, 0.8);
+}
+
+.cell.G7 {
+    width: 43px;
+    height: 84px;
+    top: 230px;
+    left: 299px;
+    background-color: blue;
+}
