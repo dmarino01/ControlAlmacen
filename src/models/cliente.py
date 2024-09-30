@@ -4,7 +4,7 @@ class Cliente(db.Model):
     __tablename__ = 'clientes'
 
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100))
+    nombre = db.Column(db.String(100), unique=True)
     contacto = db.Column(db.String(100))
 
     #Relationships

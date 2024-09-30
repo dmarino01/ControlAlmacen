@@ -8,11 +8,19 @@
     <li class="breadcrumb-item"><a href="#">Mantenedor</a></li>
     <li class="breadcrumb-item active">Clientes</li>
 </ol>
+
 <div class="card mb-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
         Listado de Clientes
+        <span class="mx-2">|</span>
+        <a class="btn btn-sm btn-success" href="#" data-bs-toggle="modal" data-bs-target="#clientModal"
+            onclick="openClientModal(null)">
+            <i class="fa fa-plus"></i> CREAR NUEVO CLIENTE
+        </a>
     </div>
+
+
     <div class="card-body">
         <table id="datatablesSimple">
             <thead>
@@ -20,6 +28,7 @@
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Contacto</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tfoot>
@@ -27,20 +36,33 @@
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Contacto</th>
+                    <th>Acción</th>
                 </tr>
             </tfoot>
             <tbody>
+                {% for item in clientes %}
                 <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.contacto }}</td>
+                    <td class="col-2">
+                        <a class="btn btn-sm btn-warning" href="#" data-bs-toggle="modal" data-bs-target="#clientModal"
+                            onclick="openClientModal({{ item.id }}, '{{ item.nombre }}', '{{ item.contacto }}')">
+                            <i class="fa fa-pen"></i></a>
+                        <a class="btn btn-sm btn-danger" href="#" onclick="return confirmDelete();"><i
+                                class="fa fa-trash"></i></a>
+                    </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 
+{% include 'components/clientes/modal_form.html' %}
+
 {% endblock content %}
+
+{% block customJS %}
+
+{% endblock customJS %}

@@ -1,0 +1,51 @@
+<div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientModalLabel">Crear Nuevo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="clientForm" method="POST" action="/save-client">
+                    <input type="hidden" id="clientId" name="id">
+                    <div class="mb-3">
+                        <label for="clientName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="clientName" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientContact" class="form-label">Contacto</label>
+                        <input type="text" class="form-control" id="clientContact" name="contacto" required>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-xmark"></i> Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="clientForm"><i class="fas fa-floppy-disk"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openClientModal(id = null, nombre = '', contacto = '') {
+        const modalTitle = document.getElementById('clientModalLabel');
+        const clientForm = document.getElementById('clientForm');
+        const clientId = document.getElementById('clientId');
+        const clientName = document.getElementById('clientName');
+        const clientContact = document.getElementById('clientContact');
+
+        if (id) {
+            modalTitle.innerText = 'Editar Cliente';
+            clientForm.action = '/edit-client/' + id;
+        } else {
+            modalTitle.innerText = 'Crear Nuevo Cliente';
+            clientForm.action = '/create-client';
+        }
+
+        clientId.value = id || '';
+        clientName.value = nombre || '';
+        clientContact.value = contacto || '';
+    }
+</script>

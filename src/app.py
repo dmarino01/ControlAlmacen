@@ -1,6 +1,7 @@
 from flask import Flask, render_template, abort
 from config import Config, csrf
 from db import db
+from sqlalchemy import exc
 
 from controllers.ControllerAlmacen import ControllerAlmacen
 
@@ -22,6 +23,10 @@ app.register_blueprint(cliente_bp)
 def index():
     almacenes = ControllerAlmacen.getAlmacenes()
     return render_template('index.html', almacenes=almacenes)
+
+@app.route('/plantilla')
+def plantilla():
+    return render_template('layout_old.html')
 
 @app.route('/error')
 def trigger_error():

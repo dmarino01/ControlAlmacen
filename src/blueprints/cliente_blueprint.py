@@ -9,3 +9,4 @@ cliente_bp = Blueprint('cliente', __name__)
 def clientes():
     data = ControllerCliente.getClientes()
     return render_template('components/clientes/index.html', clientes = data)
+
