@@ -27,3 +27,18 @@ class ControllerCliente:
             db.session.rollback()
             print(f"General error: {e}")
             raise e
+        
+    @classmethod
+    def updateCliente(cls, nombre, contacto, id):
+        try:
+            cliente = Cliente.query.get(id)
+            if not cliente:
+                raise ValueError("Cliente no encontrado.")
+            cliente.nombre = nombre
+            cliente.contacto = contacto
+            db.session.commit()
+            return
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error al actualizar el cliente: {e}")
+            raise e
