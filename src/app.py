@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, flash
 from config import Config, csrf
 from db import db
 from sqlalchemy import exc

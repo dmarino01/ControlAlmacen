@@ -17,17 +17,15 @@ def clientes():
 def create_client():
     if request.method == 'GET':
         return redirect(url_for("cliente.clientes"))
-    
     if request.method == 'POST':
-
         nombre = request.form['nombre']
         contacto = request.form['contacto']
-
         try:
-            # Save the new client to the database
-            # (Your database logic here)
+            ControllerCliente.createCliente(nombre, contacto)
             flash('¡Cliente creado exitosamente!', 'success')
             return redirect(url_for('cliente.clientes'))
+        except ValueError as e:
+            flash(str(e), 'error')
         except exc.IntegrityError:
             flash('Error de integridad: el cliente ya existe.', 'error')
             return redirect(url_for('cliente.clientes'))

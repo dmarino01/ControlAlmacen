@@ -158,29 +158,42 @@
     <script src="{{ url_for('static', filename='assets/demo/chart-area-demo.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/demo/chart-bar-demo.js') }}"></script>
     -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css"
-        integrity="sha512-k+xZuzf4IaGQK9sSDjaNyrfwgxBfoF++7u6Q0ZVUs2rDczx9doNZkYXyyQbnJQcMR4o+IjvAcIj69hHxiOZEig=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.js"
-        integrity="sha512-ZHzbWDQKpcZxIT9l5KhcnwQTidZFzwK/c7gpUUsFvGjEsxPusdUCyFxjjpc7e/Wj7vLhfMujNx7COwOmzbn+2w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.3.0/dist/simple-notify.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.3.0/dist/simple-notify.min.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const messages = {{ get_flashed_messages(with_categories=true) | tojson }};
-    
-            if (messages.length > 0) {
-                Toastify({
-                    text: messages[0][1], // Mensaje de la lista flash
-                    duration: 3000,
-                    gravity: "top",
-                    position: 'right',
-                    backgroundColor: messages[0][0] === 'error' ? 'red' : 'green',
-                }).showToast();
-            }
-        });
+            const messages = {{ get_flashed_messages(with_categories = True) | tojson
+        }};
+
+        const notificationTypes = {
+            success: { title: 'Exito', status: 'success' },
+            warning: { title: 'Advertencia', status: 'warning' },
+            error: { title: 'Error', status: 'error' },
+            info: { title: 'Info', status: 'info' }
+        };
+
+        if (messages.length > 0) {
+            messages.forEach(function (message) {
+                const messageCategory = message[0]; // e.g., 'success', 'warning', 'error', 'info'
+                const messageText = message[1];
+                const notifyType = notificationTypes[messageCategory] || notificationTypes.info;
+
+                new Notify({
+                    title: notifyType.title, // Title based on the message category
+                    text: messageText, // The message text
+                    status: notifyType.status, // Built-in status for color/type
+                    autoclose: true,
+                    effect: 'slide',
+                    speed: 300,
+                    showCloseButton: true,
+                    showIcon: true,
+                });
+            });
+        }
+    });
     </script>
+
     {% block customJS %}{% endblock %}
 </body>
 

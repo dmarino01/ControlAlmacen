@@ -4,14 +4,14 @@ class Cliente(db.Model):
     __tablename__ = 'clientes'
 
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), unique=True)
-    contacto = db.Column(db.String(100))
+    nombre = db.Column(db.String(100), nullable=False, unique=True)
+    contacto = db.Column(db.String(100), nullable=False)
 
     #Relationships
     contratos = db.relationship('Contrato', back_populates='cliente', lazy=True)
 
     def __init__(self, nombre, contacto):
-        self.nombre = nombre,
+        self.nombre = nombre
         self.contacto = contacto
 
     def __repr__(self):
