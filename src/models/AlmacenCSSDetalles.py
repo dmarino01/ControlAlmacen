@@ -12,3 +12,11 @@ class AlmacenCSSDetalles(db.Model):
     almacen_id = db.Column(db.Integer, db.ForeignKey('almacenes.id'))
 
     almacen = db.relationship('Almacen', back_populates='almacenCSSDetalles', lazy=True)
+
+    def __init__(self, top, left_pos, width, height, color, almacen_id):
+        self.top = top
+        self.left_pos = left_pos
+        self.width = width
+        self.height = height
+        self.color = color
+        self.almacen_id = almacen_id

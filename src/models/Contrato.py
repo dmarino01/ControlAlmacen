@@ -11,6 +11,12 @@ class Contrato(db.Model):
 
     cliente = db.relationship('Cliente', back_populates='contratos', lazy=True)
     puerta = db.relationship('Puerta', back_populates='contrato')
+
+    def __init__(self, cliente_id, puerta_id, fecha_inicio, fecha_final):
+        self.cliente_id = cliente_id
+        self.puerta_id = puerta_id
+        self.fecha_inicio = fecha_inicio
+        self.fecha_final = fecha_final
     
     def __repr__(self):
         return (

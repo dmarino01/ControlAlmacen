@@ -4,7 +4,7 @@ class Puerta(db.Model):
     __tablename__ = 'puertas'
 
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(50))
+    nombre = db.Column(db.String(50), unique=True)
     estado_id = db.Column(db.Integer, db.ForeignKey('puerta_estados.id'))
     almacen_id = db.Column(db.Integer, db.ForeignKey('almacenes.id'))
 
@@ -12,6 +12,11 @@ class Puerta(db.Model):
     estado = db.relationship('PuertaEstado', back_populates='puertas') 
     contrato = db.relationship('Contrato', back_populates='puerta', lazy=True, uselist=False)
     almacen = db.relationship('Almacen', back_populates='puertas', lazy=True)
+
+    def __init__(self, nombre, estado_id, almacen_id):
+        self.nombre = nombre
+        self.estado_id = estado_id
+        self.almacen_id = almacen_id
 
     def __repr__(self):
         return (
