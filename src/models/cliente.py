@@ -10,6 +10,10 @@ class Cliente(db.Model):
     #Relationships
     contratos = db.relationship('Contrato', back_populates='cliente', lazy=True)
 
+    def __init__(self, nombre, contacto):
+        self.nombre = nombre,
+        self.contacto = contacto
+
     def __repr__(self):
         return (
             f"<Cliente id={self.id}, "

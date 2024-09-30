@@ -8,6 +8,7 @@
             
             <div class="modal-body">
                 <form id="clientForm" method="POST" action="/save-client">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="clientId" name="id">
                     <div class="mb-3">
                         <label for="clientName" class="form-label">Nombre</label>
@@ -38,10 +39,10 @@
 
         if (id) {
             modalTitle.innerText = 'Editar Cliente';
-            clientForm.action = '/edit-client/' + id;
+            clientForm.action = '/editar_cliente/' + id;
         } else {
             modalTitle.innerText = 'Crear Nuevo Cliente';
-            clientForm.action = '/create-client';
+            clientForm.action = '/crear_cliente';
         }
 
         clientId.value = id || '';
