@@ -22,5 +22,17 @@ window.addEventListener('DOMContentLoaded', event => {
             localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
         });
     }
+});
 
+const dataTable = new simpleDatatables.DataTable("#datatablesSimple", {
+    perPage: 10,
+    labels: {
+        placeholder: "Buscar...",
+        perPage: "Resultados por página",
+        noRows: "No hay datos disponibles",
+        info: "Mostrando {start} a {end} de {rows} resultados",
+        allRows: "Todos",
+        filter: "Filtrar",
+        sort: "Ordenar",
+    }
 });
