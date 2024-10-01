@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort, flash
+from flask import Flask, redirect, render_template, abort, flash, request, url_for
 from config import Config, csrf
 from db import db
 from sqlalchemy import exc
@@ -38,7 +38,8 @@ def bad_request(error):
 
 @app.errorhandler(404)
 def not_found(error):
-    return {"error": "Resource not found"}, 404
+    flash("Recurso no encontrado. Redirigiendo a la página de inicio.", 'error')
+    return redirect(url_for('index')) 
 
 @app.errorhandler(500)
 def internal_error(error):

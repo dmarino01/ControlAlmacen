@@ -45,11 +45,13 @@
                     <td>{{ item.nombre }}</td>
                     <td>{{ item.contacto }}</td>
                     <td class="col-2">
-                        <a class="btn btn-sm btn-warning" href="#" data-bs-toggle="modal" data-bs-target="#clientModal"
+                        <a class="btn btn-sm btn-warning" title="Editar" data-bs-toggle="modal"
+                            data-bs-target="#clientModal"
                             onclick="openClientModal({{ item.id }}, '{{ item.nombre }}', '{{ item.contacto }}')">
                             <i class="fa fa-pen"></i></a>
-                        <a class="btn btn-sm btn-danger" href="#" onclick="return confirmDelete();"><i
-                                class="fa fa-trash"></i></a>
+                        <a class="btn btn-sm btn-danger" title="Eliminar"
+                            onclick="return confirmDelete(event, {{ item.id }});">
+                            <i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -63,5 +65,43 @@
 {% endblock content %}
 
 {% block customJS %}
+<script>
+    function confirmDelete(event, clienteId) {
+        event.preventDefault(); // Evita el comportamiento predeterminado del enlace
 
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás recuperar este registro!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminarlo!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("Client ID:", clienteId); // Asegúrate de que se imprima el ID correcto
+
+                // Enviar solicitud POST
+                fetch('/eliminar_cliente/' + clienteId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}' // Incluye CSRF token si lo necesitas
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '/clientes'; // Redirige a la lista de clientes
+                    } else {
+                        Swal.fire('Error', 'No se pudo eliminar el cliente.', 'error');
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    Swal.fire('Error', 'Hubo un problema al eliminar el cliente.', 'error');
+                });
+            }
+        });
+    }
+
+</script>
 {% endblock customJS %}

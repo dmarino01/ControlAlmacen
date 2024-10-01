@@ -6,13 +6,15 @@ class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False, unique=True)
     contacto = db.Column(db.String(100), nullable=False)
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False)
 
     #Relationships
     contratos = db.relationship('Contrato', back_populates='cliente', lazy=True)
 
-    def __init__(self, nombre, contacto):
+    def __init__(self, nombre, contacto, is_deleted=False):
         self.nombre = nombre
         self.contacto = contacto
+        self.is_deleted = is_deleted
 
     def __repr__(self):
         return (
