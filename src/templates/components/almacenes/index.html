@@ -1,22 +1,22 @@
 {% extends "layout.html" %}
 
-{% block title %} Clientes {% endblock title %}
+{% block title %} Almacenes {% endblock title %}
 
 {% block content %}
-<h1 class="mt-4">Listado de Clientes</h1>
+<h1 class="mt-4">Listado de Almacenes</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="#">Mantenedor</a></li>
-    <li class="breadcrumb-item active">Clientes</li>
+    <li class="breadcrumb-item active">Almacenes</li>
 </ol>
 
 <div class="card mb-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
-        Listado de Clientes
+        Listado de Almacenes
         <span class="mx-2">|</span>
-        <a class="btn btn-sm btn-success" href="#" data-bs-toggle="modal" data-bs-target="#clienteModal"
-            onclick="openClienteModal(null)">
-            <i class="fa fa-plus"></i> CREAR NUEVO CLIENTE
+        <a class="btn btn-sm btn-success" href="#" data-bs-toggle="modal" data-bs-target="#almacenModal"
+            onclick="openAlmacenModal(null)">
+            <i class="fa fa-plus"></i> CREAR NUEVO ALMACEN
         </a>
     </div>
 
@@ -26,7 +26,7 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Contacto</th>
+                    <th>N° de Puertas</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -34,20 +34,20 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Contacto</th>
+                    <th>N° de Puertas</th>
                     <th>Acción</th>
                 </tr>
             </tfoot>
             <tbody>
-                {% for item in clientes %}
+                {% for item in almacenes %}
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.nombre }}</td>
-                    <td>{{ item.contacto }}</td>
+                    <td>{{ item.numero_de_puertas }}</td>
                     <td class="col-2">
                         <a class="btn btn-sm btn-warning" title="Editar" data-bs-toggle="modal"
-                            data-bs-target="#clienteModal"
-                            onclick="openClienteModal({{ item.id }}, '{{ item.nombre }}', '{{ item.contacto }}')">
+                            data-bs-target="#almacenModal"
+                            onclick="openAlmacenModal({{ item.id }}, '{{ item.nombre }}')">
                             <i class="fa fa-pen"></i></a>
                         <a class="btn btn-sm btn-danger" title="Eliminar"
                             onclick="return confirmDelete(event, {{ item.id }});">
@@ -60,13 +60,13 @@
     </div>
 </div>
 
-{% include 'components/clientes/modal_form.html' %}
+{% include 'components/almacenes/modal_form.html' %}
 
 {% endblock content %}
 
 {% block customJS %}
 <script>
-    function confirmDelete(event, clienteId) {
+    function confirmDelete(event, almacenId) {
         event.preventDefault(); // Evita el comportamiento predeterminado del enlace
 
         Swal.fire({
@@ -80,10 +80,10 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log("Client ID:", clienteId); // Asegúrate de que se imprima el ID correcto
+                console.log("Almacen ID:", almacenId); // Asegúrate de que se imprima el ID correcto
 
                 // Enviar solicitud POST
-                fetch('/eliminar_cliente/' + clienteId, {
+                fetch('/eliminar_almacen/' + almacenId, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -91,13 +91,13 @@
                     }
                 }).then(response => {
                     if (response.ok) {
-                        window.location.href = '/clientes'; // Redirige a la lista de clientes
+                        window.location.href = '/almacenes'; // Redirige a la lista de almacens
                     } else {
-                        Swal.fire('Error', 'No se pudo eliminar el cliente.', 'error');
+                        Swal.fire('Error', 'No se pudo eliminar el almacen.', 'error');
                     }
                 }).catch(err => {
                     console.error(err);
-                    Swal.fire('Error', 'Hubo un problema al eliminar el cliente.', 'error');
+                    Swal.fire('Error', 'Hubo un problema al eliminar el almacen.', 'error');
                 });
             }
         });

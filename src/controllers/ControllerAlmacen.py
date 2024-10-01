@@ -8,14 +8,14 @@ class ControllerAlmacen:
     @classmethod
     def getAlmacenes(cls):
         try:
-            almacenes = Almacen.query.all()
+            almacenes = Almacen.query.filter_by(is_deleted=False).all()
             return almacenes
         except Exception as e:
             print(f"Error fetching almacenes: {e}")
             return []
         
     @classmethod
-    def createAlmacenes(cls, nombre):
+    def createAlmacen(cls, nombre):
         nuevo_almacen = Almacen(nombre=nombre)
         try:
             db.session.add(nuevo_almacen)
@@ -28,4 +28,19 @@ class ControllerAlmacen:
         except Exception as e:
             db.session.rollback()
             print(f"General error: {e}")
+            raise e
+        
+    @classmethod
+    def deleteAlmacen(cls, id):
+        try:
+            almacen = Almacen.query.get(id)
+            if not almacen:
+                raise ValueError("Almacen no encontrado.")
+            almacen.is_deleted = True
+            db.session.commit()
+            flash('¡Almacen eliminado correctamente!', 'success')
+            return almacen
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error al eliminar el almacen: {e}")
             raise e
