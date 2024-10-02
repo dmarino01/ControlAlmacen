@@ -1,7 +1,6 @@
 from flask import Flask, redirect, render_template, abort, flash, request, url_for
 from config import Config, csrf
 from db import db
-from sqlalchemy import exc
 
 from controllers.ControllerAlmacen import ControllerAlmacen
 
@@ -34,7 +33,7 @@ def trigger_error():
 
 @app.errorhandler(400)
 def bad_request(error):
-    return {"error": "Bad request"}, 400
+    return {"error 400": "Bad request"}, 400
 
 @app.errorhandler(404)
 def not_found(error):

@@ -5,11 +5,11 @@
                 <h5 class="modal-title" id="almacenModalLabel">Crear Nuevo Almacén</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            
             <div class="modal-body">
-                <!-- Formulario dentro del modal -->
                 <form id="almacenForm" method="POST" action="#">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <input type="text" id="clienteId" name="id">
+                    <input type="hidden" id="almacenId" name="id">
                     <div class="mb-3">
                         <label for="almacenNombre" class="form-label">Nombre del Almacén</label>
                         <input type="text" class="form-control" id="almacenNombre" name="almacenNombre" required>
@@ -90,16 +90,34 @@
                     </div>
                 </form>
             </div>
+            
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="guardarAlmacen"><i class="fa fa-save"></i> Guardar
-                    Almacén</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i> Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="almacenForm"><i class="fa fa-save"></i> Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    function openAlmacenModal(id = null, nombre = '') {
+        const modalTitle = document.getElementById('almacenModalLabel');
+        const almacenForm = document.getElementById('almacenForm');
+        const almacenId = document.getElementById('almacenId');
+        const almacenNombre = document.getElementById('almacenNombre');
+
+        if (id) {
+            modalTitle.innerText = 'Editar Almacen';
+            almacenForm.action = '/editar_almacen/' + id;
+        } else {
+            modalTitle.innerText = 'Crear Nuevo Almacen';
+            almacenForm.action = '/crear_almacen';
+        }
+
+        almacenId.value = id || '';
+        almacenNombre.value = nombre || '';
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const agregarPuertaBtn = document.getElementById('agregarPuerta');
         const listaPuertas = document.getElementById('listaPuertas');
@@ -134,38 +152,4 @@
             }
         });
     });
-    const modalAlmacen = document.getElementById('almacenModal');
-    const almacenModal = new bootstrap.Modal(modalAlmacen);
-    modalAlmacen.addEventListener('hide.bs.modal', function (event) {
-        const confirmClose = confirm('¿Estás seguro de que deseas cerrar el formulario? Se perderán los datos no guardados.');
-        if (!confirmClose) {
-            event.preventDefault();  // Evita que el modal se cierre si el usuario cancela
-        }
-    });
-    function showInfo(id) {
-        document.getElementById('info-box-' + id).style.display = 'block';
-    }
-    function hideInfo(id) {
-        document.getElementById('info-box-' + id).style.display = 'none';
-    }
-
-    function openAlmacenModal(id = null, nombre = '', contacto = '') {
-        const modalTitle = document.getElementById('almacenModalLabel');
-        const almacenForm = document.getElementById('almacenForm');
-        const almacenId = document.getElementById('almacenId');
-        const almacenNombre = document.getElementById('almacenNombre');
-        const almacenContacto = document.getElementById('almacenContacto');
-
-        if (id) {
-            modalTitle.innerText = 'Editar Almacen';
-            almacenForm.action = '/editar_almacen/' + id;
-        } else {
-            modalTitle.innerText = 'Crear Nuevo Almacen';
-            almacenForm.action = '/crear_almacen';
-        }
-
-        almacenId.value = id || '';
-        almacenNombre.value = nombre || '';
-        almacenContacto.value = contacto || '';
-    }
 </script>

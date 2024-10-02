@@ -20,13 +20,11 @@ def crear_cliente():
         contacto = request.form['contacto']
         try:
             ControllerCliente.createCliente(nombre, contacto)
-            return redirect(url_for('cliente.clientes'))
         except ValueError as e:
             flash(str(e), 'error')
-            return redirect(url_for('cliente.clientes'))
         except exc.IntegrityError:
             flash('Error de integridad: el cliente ya existe.', 'error')
-            return redirect(url_for('cliente.clientes'))
+        return redirect(url_for('cliente.clientes'))
         
 
 @cliente_bp.route('/editar_cliente/<int:id>', methods=['GET', 'POST'])
@@ -35,18 +33,17 @@ def editar_cliente(id):
         nombre = request.form['nombre']
         contacto = request.form['contacto']
         try:
-            ControllerCliente.updateCliente(nombre, contacto, id)
-            return redirect(url_for('cliente.clientes'))
+            ControllerCliente.updateCliente(nombre, contacto, id)   
         except Exception as e:
             flash(f'Error al actualizar el cliente: {str(e)}', 'error')
-            return redirect(url_for('cliente.clientes'))
+        return redirect(url_for('cliente.clientes'))
+        
         
 @cliente_bp.route('/eliminar_cliente/<int:id>', methods=['GET', 'POST'])
 def eliminar_cliente(id):
     if request.method == 'POST':
         try:
-            ControllerCliente.deleteCliente(id)
-            return redirect(url_for('cliente.clientes'))
+            ControllerCliente.deleteCliente(id)        
         except Exception as e:
             flash(f'Error al eliminar el cliente: {str(e)}', 'error')
-            return redirect(url_for('cliente.clientes'))
+        return redirect(url_for('cliente.clientes'))

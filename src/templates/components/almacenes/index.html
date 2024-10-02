@@ -66,6 +66,21 @@
 
 {% block customJS %}
 <script>
+    const modalAlmacen = document.getElementById('almacenModal');
+    const almacenModal = new bootstrap.Modal(modalAlmacen);
+    modalAlmacen.addEventListener('hide.bs.modal', function (event) {
+        const confirmClose = confirm('¿Estás seguro de que deseas cerrar el formulario? Se perderán los datos no guardados.');
+        if (!confirmClose) {
+            event.preventDefault();  // Evita que el modal se cierre si el usuario cancela
+        }
+    });
+    function showInfo(id) {
+        document.getElementById('info-box-' + id).style.display = 'block';
+    }
+    function hideInfo(id) {
+        document.getElementById('info-box-' + id).style.display = 'none';
+    }
+
     function confirmDelete(event, almacenId) {
         event.preventDefault(); // Evita el comportamiento predeterminado del enlace
 
@@ -102,6 +117,5 @@
             }
         });
     }
-
 </script>
 {% endblock customJS %}

@@ -22,7 +22,6 @@ def agregar_almacen():
         # Recibir los datos del formulario
         nombre_almacen = request.form.get('nombreAlmacen')
         puertas_data = request.form.getlist('nombrePuerta')
-        estado_puertas = request.form.getlist('estadoPuerta')
         css_detalles = {
             'top': request.form.get('top'),
             'leftPos': request.form.get('leftPos'),
@@ -32,11 +31,37 @@ def agregar_almacen():
         }
         # Guardar los datos usando los controladores
         almacen_id = ControllerAlmacen.createAlmacen(nombre_almacen)
-        ControllerPuerta.createPuertas(almacen_id, puertas_data, estado_puertas)
+        ControllerPuerta.createPuertas(almacen_id, puertas_data)
         ControllerCSSDetalles.createCSSDetalles(almacen_id, css_detalles)
-        flash('Almacén agregado exitosamente', 'success')
-        return redirect(url_for('index'))
-    return render_template('index')
+        return redirect(url_for('almacen.almacenes'))
+
+
+@almacen_bp.route('/editar_almacen/<int:id>', methods=['GET', 'POST'])
+def editar_almacen(id):
+    if request.method == 'POST':
+        nombre_almacen = request.form['almacenNombre']
+        puertas_data = request.form.getlist('nombrePuerta') or []
+
+        # Initialize the CSS details dictionary
+        css_detalles = {}
+        
+        # Validate and update only if the value is present
+        if request.form.get('top'):
+            css_detalles['top'] = request.form['top']
+        if request.form.get('leftPos'):
+            css_detalles['leftPos'] = request.form['leftPos']
+        if request.form.get('width'):
+            css_detalles['width'] = request.form['width']
+        if request.form.get('height'):
+            css_detalles['height'] = request.form['height']
+        if request.form.get('color'):
+            css_detalles['color'] = request.form['color']
+        try:
+            almacen_id = ControllerAlmacen.updateAlmacen(id, nombre_almacen)
+            ControllerCSSDetalles.updateCSSDetalles(id, css_detalles)
+        except Exception as e:
+            flash(f'Error al actualizar el almacen: {str(e)}', 'error')
+        return redirect(url_for('almacen.almacenes'))
 
 
 @almacen_bp.route('/eliminar_almacen/<int:id>', methods=['GET', 'POST'])
@@ -44,7 +69,6 @@ def eliminar_almacen(id):
     if request.method == 'POST':
         try:
             ControllerAlmacen.deleteAlmacen(id)
-            return redirect(url_for('almacen.almacenes'))
         except Exception as e:
             flash(f'Error al eliminar el almacen: {str(e)}', 'error')
-            return redirect(url_for('almacen.almacenes'))
+        return redirect(url_for('almacen.almacenes'))

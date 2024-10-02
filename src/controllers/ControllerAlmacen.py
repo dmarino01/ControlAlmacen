@@ -31,6 +31,24 @@ class ControllerAlmacen:
             raise e
         
     @classmethod
+    def updateAlmacen(cls, id, nombre):
+        try:
+            almacen = Almacen.query.get(id)
+            if not almacen:
+                raise ValueError("Almacen no encontrado.")
+            almacen.nombre = nombre
+            db.session.commit()
+            flash('¡Almacen actualizado exitosamente', 'success')
+            return almacen
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash('Error de integridad: el almacen ya existe.', 'error')
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error al actualizar el almacen: {e}")
+            raise e
+        
+    @classmethod
     def deleteAlmacen(cls, id):
         try:
             almacen = Almacen.query.get(id)
