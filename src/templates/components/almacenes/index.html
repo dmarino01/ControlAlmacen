@@ -47,7 +47,7 @@
                     <td class="col-3">
                         <a class="btn btn-sm btn-primary" title="Asignar Puertas" data-bs-toggle="modal"
                             data-bs-target="#puertasModal"
-                            onclick="openPuertaModal({{ item.id }}, '{{ item.nombre }}')">
+                            onclick="openPuertasModal({{ item.id }}, '{{ item.nombre|escape }}')">
                             <i class="fa fa-tools"></i></a>
                         <a class="btn btn-sm btn-warning" title="Editar Almacen" data-bs-toggle="modal"
                             data-bs-target="#almacenModal"
@@ -91,13 +91,6 @@
             event.preventDefault();  // Evita que el modal se cierre si el usuario cancela
         }
     });
-
-    function showInfo(id) {
-        document.getElementById('info-box-' + id).style.display = 'block';
-    }
-    function hideInfo(id) {
-        document.getElementById('info-box-' + id).style.display = 'none';
-    }
 
     function confirmDelete(event, almacenId) {
         event.preventDefault(); // Evita el comportamiento predeterminado del enlace

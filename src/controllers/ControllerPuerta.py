@@ -14,3 +14,14 @@ class ControllerPuerta:
             db.session.rollback()
             print(f"General error: {e}")
             raise e
+        
+    @classmethod
+    def getPuertasPorAlmacen(cls, id):
+        try:
+            puertas = Puerta.query.filter_by(almacen_id=id).all()
+            return puertas
+        except Exception as e:
+            db.session.rollback()
+            print(f"General error: {e}")
+            raise e
+        

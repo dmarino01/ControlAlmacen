@@ -53,5 +53,12 @@
 {% endblock content %}
 
 {% block customJS %}
-
+<script>
+    function showInfo(id) {
+        document.getElementById('info-box-' + id).style.display = 'block';
+    }
+    function hideInfo(id) {
+        document.getElementById('info-box-' + id).style.display = 'none';
+    }
+</script>
 {% endblock customJS %}

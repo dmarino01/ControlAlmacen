@@ -1,6 +1,7 @@
 from models import Almacen
 from db import db
 from sqlalchemy import exc
+from sqlalchemy.orm import joinedload
 from flask import flash
 
 class ControllerAlmacen:

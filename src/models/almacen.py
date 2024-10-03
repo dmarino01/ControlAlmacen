@@ -9,7 +9,7 @@ class Almacen(db.Model):
 
     #Relationships
     almacenCSSDetalles = db.relationship('AlmacenCSSDetalles', back_populates='almacen', lazy=True)
-    puertas = db.relationship('Puerta', back_populates='almacen', lazy=True)
+    puertas = db.relationship('Puerta', back_populates='almacen')
 
     def __init__(self, nombre, is_deleted=False):
         self.nombre = nombre

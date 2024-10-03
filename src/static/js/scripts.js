@@ -24,15 +24,20 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 });
 
-const dataTable = new simpleDatatables.DataTable("#datatablesSimple", {
-    perPage: 10,
-    labels: {
-        placeholder: "Buscar...",
-        perPage: "Resultados por página",
-        noRows: "No hay datos disponibles",
-        info: "Mostrando {start} a {end} de {rows} resultados",
-        allRows: "Todos",
-        filter: "Filtrar",
-        sort: "Ordenar",
+document.addEventListener("DOMContentLoaded", function () {
+    var tableElement = document.querySelector("#datatablesSimple");
+    if (tableElement) {
+        const dataTable = new simpleDatatables.DataTable(tableElement, {
+            perPage: 10,
+            labels: {
+                placeholder: "Buscar...",
+                perPage: "Resultados por página",
+                noRows: "No hay datos disponibles",
+                info: "Mostrando {start} a {end} de {rows} resultados",
+                allRows: "Todos",
+                filter: "Filtrar",
+                sort: "Ordenar",
+            }
+        });
     }
 });

@@ -18,6 +18,14 @@ class Puerta(db.Model):
         self.estado_id = estado_id
         self.almacen_id = almacen_id
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'estado_id': self.estado_id,
+            'almacen_id': self.almacen_id
+        }
+
     def __repr__(self):
         return (
             f"<Puerta id={self.id}, "

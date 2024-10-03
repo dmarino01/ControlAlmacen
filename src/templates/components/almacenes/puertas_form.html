@@ -5,11 +5,10 @@
                 <h5 class="modal-title" id="puertasModalLabel">Asignar Puertas a Almacén</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body">
-                <form id="puertaForm" method="POST" action="#">
+                <form id="puertasForm" method="POST" action="#">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <input type="hidden" id="puertaId" name="id">
+                    <input type="hidden" id="almacenId" name="almacenId">
 
                     <div class="accordion mb-3" id="accordionPuertas">
                         <div class="accordion-item">
@@ -27,14 +26,6 @@
                                         <label for="nombrePuerta" class="form-label">Nombre de la Puerta</label>
                                         <input type="text" class="form-control" id="nombrePuerta" name="nombrePuerta">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="estadoPuerta" class="form-label">Estado de la Puerta</label>
-                                        <select class="form-control" id="estadoPuerta" name="estadoPuerta">
-                                            {% for item in estadoPuertas %}
-                                            <option value="{{ item.id }}">{{ item.descripcion }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
                                     <button type="button" class="btn btn-primary" id="agregarPuerta">Agregar
                                         Puerta</button>
                                 </div>
@@ -42,66 +33,107 @@
                         </div>
                     </div>
 
-                    <h5 class="mt-4">Puertas Agregadas:</h5>
-                    <ul class="list-group">No hay puertas agregadas</ul>
-                    <ul id="listaPuertas" class="list-group"></ul>
-
+                    <h5 id="tituloPuertas" class="mt-4">Puertas Agregadas:</h5>
+                    <ul id="listaPuertas" class="list-group">
+                        {% for almacen in almacenes %}
+                        {% if almacen.id == almacen_id %}
+                        {% for puerta in almacen.puertas %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ puerta.nombre }}
+                            <button type="button" class="btn btn-danger btn-sm"
+                                onclick="eliminarPuerta(this)">Eliminar</button>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
                 </form>
             </div>
-            
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i> Cancelar</button>
-                <button type="submit" class="btn btn-primary" form="puertaForm"><i class="fa fa-save"></i> Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i>
+                    Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="puertasForm"><i class="fa fa-save"></i>
+                    Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
+
+
 <script>
-    function openPuertasModal(id = null) {
-        const modalTitle = document.getElementById('puertaModalLabel');
-        const puertaForm = document.getElementById('puertaForm');
-        const puertaId = document.getElementById('puertaId');
-        const puertaNombre = document.getElementById('puertaNombre');
+    function openPuertasModal(id = null, nombre = '') {
+        const modalTitle = document.getElementById('puertasModalLabel');
+        const listaPuertas = document.getElementById('listaPuertas');
+        const almacenId = document.getElementById('almacenId');  // Asegúrate de que este input esté presente en tu modal
 
         if (id) {
-            modalTitle.innerText = 'Asignar Puertas';
-            puertaForm.action = '/asignar_puertas/' + id;
-        }
+            modalTitle.innerText = `Asignar Puertas a Almacén ${nombre}`;
+            almacenId.value = id;
 
-        puertaId.value = id || '';
-        puertaNombre.value = nombre || '';
+            // Limpiar la lista de puertas
+            listaPuertas.innerHTML = '';
+
+            // Realizar una llamada AJAX para obtener las puertas
+            fetch(`/almacenes/${id}/puertas`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(puerta => {
+                            const nuevaPuerta = document.createElement('li');
+                            nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            nuevaPuerta.textContent = puerta.nombre;
+                            
+                            const eliminarBtn = document.createElement('button');
+                            eliminarBtn.className = 'btn btn-danger btn-sm';
+                            eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
+                            eliminarBtn.onclick = function () {
+                                listaPuertas.removeChild(nuevaPuerta);
+                            };
+                            
+                            nuevaPuerta.appendChild(eliminarBtn);
+                            listaPuertas.appendChild(nuevaPuerta);
+                        });
+                    } else {
+                        listaPuertas.innerHTML = '<li class="list-group-item">No hay puertas disponibles</li>';
+                    }
+                })
+                .catch(error => console.error('Error al obtener las puertas:', error));
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         const agregarPuertaBtn = document.getElementById('agregarPuerta');
         const listaPuertas = document.getElementById('listaPuertas');
         const nombrePuertaInput = document.getElementById('nombrePuerta');
-        const estadoPuertaSelect = document.getElementById('estadoPuerta');
+        const tituloPuertas = document.getElementById('tituloPuertas');
+
         agregarPuertaBtn.addEventListener('click', function () {
             const nombrePuerta = nombrePuertaInput.value.trim();
-            const estadoPuerta = estadoPuertaSelect.value;
-
             if (nombrePuerta) {
-                // Crear un nuevo elemento de lista
                 const nuevaPuerta = document.createElement('li');
                 nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
-                nuevaPuerta.textContent = `${nombrePuerta} - ${estadoPuerta}`;
-
-                // Agregar un botón para eliminar la puerta
+                nuevaPuerta.textContent = `${nombrePuerta}`;
+                
                 const eliminarBtn = document.createElement('button');
                 eliminarBtn.className = 'btn btn-danger btn-sm';
-                eliminarBtn.textContent = 'Eliminar';
+                eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
                 eliminarBtn.onclick = function () {
                     listaPuertas.removeChild(nuevaPuerta);
+                    if (listaPuertas.children.length === 0) {
+                        tituloPuertas.innerText = 'No hay puertas agregadas';
+                    }
                 };
-
+                
                 nuevaPuerta.appendChild(eliminarBtn);
                 listaPuertas.appendChild(nuevaPuerta);
-
-                // Limpiar los campos de entrada
                 nombrePuertaInput.value = '';
-                estadoPuertaSelect.selectedIndex = 0; // Restablecer al primer elemento
+                tituloPuertas.innerText = 'Puertas Agregadas:';
             } else {
                 alert('Por favor, ingresa un nombre para la puerta.');
             }

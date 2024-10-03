@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from controllers.ControllerAlmacen import ControllerAlmacen
 from controllers.ControllerPuerta import ControllerPuerta
 from controllers.ControllerCSSDetalles import ControllerCSSDetalles
@@ -13,7 +13,14 @@ almacen_bp = Blueprint('almacen', __name__)
 def almacenes():
     data = ControllerAlmacen.getAlmacenes()
     estadoPuertas = ControllerPuertaEstados.getPuertaEstados()
-    return render_template('components/almacenes/index.html', almacenes=data, estadoPuertas = estadoPuertas)
+    return render_template('components/almacenes/index.html', almacenes=data, estadoPuertas=estadoPuertas)
+
+
+@almacen_bp.route('/almacenes/<int:id>/puertas', methods=['GET'])
+def obtener_puertas(id):
+    puertas = ControllerPuerta.getPuertasPorAlmacen(id)
+    puertas_data = [puerta.to_dict() for puerta in puertas]
+    return jsonify(puertas_data)
 
 
 @almacen_bp.route('/crear_almacen', methods=['GET', 'POST'])
@@ -44,7 +51,7 @@ def editar_almacen(id):
 
         # Initialize the CSS details dictionary
         css_detalles = {}
-        
+
         # Validate and update only if the value is present
         if request.form.get('top'):
             css_detalles['top'] = request.form['top']
