@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var tableElement = document.querySelector("#datatablesSimple");
     if (tableElement) {
         const dataTable = new simpleDatatables.DataTable(tableElement, {
-            perPage: 10,
             labels: {
                 placeholder: "Buscar...",
                 perPage: "Resultados por página",
@@ -37,7 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 allRows: "Todos",
                 filter: "Filtrar",
                 sort: "Ordenar",
-            }
+            },
+            perPage: 25,
+            perPageSelect: [10, 25, 50, 100, "Todos"]
         });
     }
 });

@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="puertasForm" method="POST" action="#">
+                <form id="puertasForm" method="POST" action="/guardarPuertas">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="almacenId" name="almacenId">
 
@@ -52,91 +52,11 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i>
                     Cancelar</button>
-                <button type="submit" class="btn btn-primary" form="puertasForm"><i class="fa fa-save"></i>
-                    Guardar</button>
+                <button type="submit" class="btn btn-primary" id="agregarPuerta" form="puertasForm"><i
+                        class="fa fa-pen-to-square"></i> Guardar
+                    Puertas</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
-<script>
-    function openPuertasModal(id = null, nombre = '') {
-        const modalTitle = document.getElementById('puertasModalLabel');
-        const listaPuertas = document.getElementById('listaPuertas');
-        const almacenId = document.getElementById('almacenId');  // Asegúrate de que este input esté presente en tu modal
-
-        if (id) {
-            modalTitle.innerText = `Asignar Puertas a Almacén ${nombre}`;
-            almacenId.value = id;
-
-            // Limpiar la lista de puertas
-            listaPuertas.innerHTML = '';
-
-            // Realizar una llamada AJAX para obtener las puertas
-            fetch(`/almacenes/${id}/puertas`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.length > 0) {
-                        data.forEach(puerta => {
-                            const nuevaPuerta = document.createElement('li');
-                            nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
-                            nuevaPuerta.textContent = puerta.nombre;
-                            
-                            const eliminarBtn = document.createElement('button');
-                            eliminarBtn.className = 'btn btn-danger btn-sm';
-                            eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
-                            eliminarBtn.onclick = function () {
-                                listaPuertas.removeChild(nuevaPuerta);
-                            };
-                            
-                            nuevaPuerta.appendChild(eliminarBtn);
-                            listaPuertas.appendChild(nuevaPuerta);
-                        });
-                    } else {
-                        listaPuertas.innerHTML = '<li class="list-group-item">No hay puertas disponibles</li>';
-                    }
-                })
-                .catch(error => console.error('Error al obtener las puertas:', error));
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const agregarPuertaBtn = document.getElementById('agregarPuerta');
-        const listaPuertas = document.getElementById('listaPuertas');
-        const nombrePuertaInput = document.getElementById('nombrePuerta');
-        const tituloPuertas = document.getElementById('tituloPuertas');
-
-        agregarPuertaBtn.addEventListener('click', function () {
-            const nombrePuerta = nombrePuertaInput.value.trim();
-            if (nombrePuerta) {
-                const nuevaPuerta = document.createElement('li');
-                nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
-                nuevaPuerta.textContent = `${nombrePuerta}`;
-                
-                const eliminarBtn = document.createElement('button');
-                eliminarBtn.className = 'btn btn-danger btn-sm';
-                eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
-                eliminarBtn.onclick = function () {
-                    listaPuertas.removeChild(nuevaPuerta);
-                    if (listaPuertas.children.length === 0) {
-                        tituloPuertas.innerText = 'No hay puertas agregadas';
-                    }
-                };
-                
-                nuevaPuerta.appendChild(eliminarBtn);
-                listaPuertas.appendChild(nuevaPuerta);
-                nombrePuertaInput.value = '';
-                tituloPuertas.innerText = 'Puertas Agregadas:';
-            } else {
-                alert('Por favor, ingresa un nombre para la puerta.');
-            }
-        });
-    });
-</script>

@@ -50,8 +50,19 @@
                             onclick="openPuertasModal({{ item.id }}, '{{ item.nombre|escape }}')">
                             <i class="fa fa-tools"></i></a>
                         <a class="btn btn-sm btn-warning" title="Editar Almacen" data-bs-toggle="modal"
-                            data-bs-target="#almacenModal"
-                            onclick="openAlmacenModal({{ item.id }}, '{{ item.nombre }}')">
+                            data-bs-target="#almacenModal" {% if item.almacenCSSDetalles|length> 0 %}
+                            onclick="openAlmacenModal(
+                            {{ item.id }},
+                            '{{ item.nombre }}',
+                            {{ item.almacenCSSDetalles[0].top }},
+                            {{ item.almacenCSSDetalles[0].left_pos }},
+                            {{ item.almacenCSSDetalles[0].width }},
+                            {{ item.almacenCSSDetalles[0].height }},
+                            '{{ item.almacenCSSDetalles[0].color }}'
+                            )"
+                            {% else %}
+                            onclick="openAlmacenModal({{ item.id }}, '{{ item.nombre }}', 0, 0, 100, 100, '#ffffff')"
+                            {% endif %}>
                             <i class="fa fa-pen"></i></a>
                         <a class="btn btn-sm btn-danger" title="Eliminar Almacen"
                             onclick="return confirmDelete(event, {{ item.id }});">
@@ -79,13 +90,6 @@
     const puertasModal = new bootstrap.Modal(modalPuertas);
 
     modalAlmacen.addEventListener('hide.bs.modal', function (event) {
-        const confirmClose = confirm('¿Estás seguro de que deseas cerrar el formulario? Se perderán los datos no guardados.');
-        if (!confirmClose) {
-            event.preventDefault();  // Evita que el modal se cierre si el usuario cancela
-        }
-    });
-
-    modalPuertas.addEventListener('hide.bs.modal', function (event) {
         const confirmClose = confirm('¿Estás seguro de que deseas cerrar el formulario? Se perderán los datos no guardados.');
         if (!confirmClose) {
             event.preventDefault();  // Evita que el modal se cierre si el usuario cancela
@@ -128,5 +132,114 @@
             }
         });
     }
+</script>
+
+<script>
+    function openAlmacenModal(id = null, nombre = '', top = '', leftPos = '', width = '', height = '', color = '') {
+        const modalTitle = document.getElementById('almacenModalLabel');
+        const almacenForm = document.getElementById('almacenForm');
+        const almacenId = document.getElementById('almacenId');
+        const almacenNombre = document.getElementById('almacenNombre');
+        const detalleTop = document.getElementById('top');
+        const detalleLeftPos = document.getElementById('leftPos');
+        const detalleWidth = document.getElementById('width');
+        const detalleHeight = document.getElementById('height');
+        const detalleColor = document.getElementById('color');
+
+        if (id) {
+            modalTitle.innerText = 'Editar Almacen';
+            almacenForm.action = '/editar_almacen/' + id;
+        } else {
+            modalTitle.innerText = 'Crear Nuevo Almacen';
+            almacenForm.action = '/crear_almacen';
+        }
+        almacenId.value = id || '';
+        almacenNombre.value = nombre || '';
+        detalleTop.value = top || '';
+        detalleLeftPos.value = leftPos || '';
+        detalleWidth.value = width || '';
+        detalleHeight.value = height || '';
+        detalleColor.value = color || '';
+    }
+</script>
+
+<script>
+    function openPuertasModal(id = null, nombre = '') {
+        const modalTitle = document.getElementById('puertasModalLabel');
+        const listaPuertas = document.getElementById('listaPuertas');
+        const almacenId = document.getElementById('almacenId');  // Asegúrate de que este input esté presente en tu modal
+
+        if (id) {
+            modalTitle.innerText = `Asignar Puertas a Almacén ${nombre}`;
+            almacenId.value = id;
+
+            // Limpiar la lista de puertas
+            listaPuertas.innerHTML = '';
+
+            // Realizar una llamada AJAX para obtener las puertas
+            fetch(`/almacenes/${id}/puertas`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(puerta => {
+                            const nuevaPuerta = document.createElement('li');
+                            nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
+                            nuevaPuerta.textContent = puerta.nombre;
+
+                            const eliminarBtn = document.createElement('button');
+                            eliminarBtn.className = 'btn btn-danger btn-sm';
+                            eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
+                            eliminarBtn.onclick = function () {
+                                listaPuertas.removeChild(nuevaPuerta);
+                            };
+
+                            nuevaPuerta.appendChild(eliminarBtn);
+                            listaPuertas.appendChild(nuevaPuerta);
+                        });
+                    } else {
+                        listaPuertas.innerHTML = '<li class="list-group-item">No hay puertas disponibles</li>';
+                    }
+                })
+                .catch(error => console.error('Error al obtener las puertas:', error));
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const agregarPuertaBtn = document.getElementById('agregarPuerta');
+        const listaPuertas = document.getElementById('listaPuertas');
+        const nombrePuertaInput = document.getElementById('nombrePuerta');
+        const tituloPuertas = document.getElementById('tituloPuertas');
+
+        agregarPuertaBtn.addEventListener('click', function () {
+            const nombrePuerta = nombrePuertaInput.value.trim();
+            if (nombrePuerta) {
+                const nuevaPuerta = document.createElement('li');
+                nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
+                nuevaPuerta.textContent = `${nombrePuerta}`;
+
+                const eliminarBtn = document.createElement('button');
+                eliminarBtn.className = 'btn btn-danger btn-sm';
+                eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
+                eliminarBtn.onclick = function () {
+                    listaPuertas.removeChild(nuevaPuerta);
+                    if (listaPuertas.children.length === 0) {
+                        tituloPuertas.innerText = 'No hay puertas agregadas';
+                    }
+                };
+
+                nuevaPuerta.appendChild(eliminarBtn);
+                listaPuertas.appendChild(nuevaPuerta);
+                nombrePuertaInput.value = '';
+                tituloPuertas.innerText = 'Puertas Agregadas:';
+            } else {
+                alert('Por favor, ingresa un nombre para la puerta.');
+            }
+        });
+    });
 </script>
 {% endblock customJS %}

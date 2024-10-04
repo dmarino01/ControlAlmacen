@@ -4,17 +4,19 @@ from sqlalchemy import exc
 from sqlalchemy.orm import joinedload
 from flask import flash
 
+
 class ControllerAlmacen:
 
     @classmethod
     def getAlmacenes(cls):
         try:
-            almacenes = Almacen.query.filter_by(is_deleted=False).all()
+            almacenes = Almacen.query.filter_by(is_deleted=False).options(
+                joinedload(Almacen.almacenCSSDetalles)).all()
             return almacenes
         except Exception as e:
             print(f"Error fetching almacenes: {e}")
             return []
-        
+
     @classmethod
     def createAlmacen(cls, nombre):
         nuevo_almacen = Almacen(nombre=nombre)
@@ -30,7 +32,7 @@ class ControllerAlmacen:
             db.session.rollback()
             print(f"General error: {e}")
             raise e
-        
+
     @classmethod
     def updateAlmacen(cls, id, nombre):
         try:
@@ -48,7 +50,7 @@ class ControllerAlmacen:
             db.session.rollback()
             print(f"Error al actualizar el almacen: {e}")
             raise e
-        
+
     @classmethod
     def deleteAlmacen(cls, id):
         try:

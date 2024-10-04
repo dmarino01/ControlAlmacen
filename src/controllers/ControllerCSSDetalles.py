@@ -44,15 +44,7 @@ class ControllerCSSDetalles:
                 if 'color' in detalles_css:
                     css_detalle.color = detalles_css['color']
             else:
-                nuevo_css_detalle = AlmacenCSSDetalles(
-                    top=detalles_css.get('top'),
-                    left_pos=detalles_css.get('leftPos'),
-                    width=detalles_css.get('width'),
-                    height=detalles_css.get('height'),
-                    color=detalles_css.get('color'),
-                    almacen_id=almacen_id
-                )
-                db.session.add(nuevo_css_detalle)
+                cls.createCSSDetalles(almacen_id, detalles_css)
             db.session.commit()
         except Exception as e:
             db.session.rollback()

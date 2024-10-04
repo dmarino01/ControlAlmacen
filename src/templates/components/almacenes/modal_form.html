@@ -5,7 +5,7 @@
                 <h5 class="modal-title" id="almacenModalLabel">Crear Nuevo Almacén</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <div class="modal-body">
                 <form id="almacenForm" method="POST" action="#">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -53,31 +53,13 @@
                     </div>
                 </form>
             </div>
-            
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i> Cancelar</button>
-                <button type="submit" class="btn btn-primary" form="almacenForm"><i class="fa fa-save"></i> Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i>
+                    Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="almacenForm"><i class="fa fa-save"></i>
+                    Guardar</button>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    function openAlmacenModal(id = null, nombre = '') {
-        const modalTitle = document.getElementById('almacenModalLabel');
-        const almacenForm = document.getElementById('almacenForm');
-        const almacenId = document.getElementById('almacenId');
-        const almacenNombre = document.getElementById('almacenNombre');
-
-        if (id) {
-            modalTitle.innerText = 'Editar Almacen';
-            almacenForm.action = '/editar_almacen/' + id;
-        } else {
-            modalTitle.innerText = 'Crear Nuevo Almacen';
-            almacenForm.action = '/crear_almacen';
-        }
-
-        almacenId.value = id || '';
-        almacenNombre.value = nombre || '';
-    }
-</script>
