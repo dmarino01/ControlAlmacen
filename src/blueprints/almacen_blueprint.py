@@ -16,13 +16,6 @@ def almacenes():
     return render_template('components/almacenes/index.html', almacenes=data, estadoPuertas=estadoPuertas)
 
 
-@almacen_bp.route('/almacenes/<int:id>/puertas', methods=['GET'])
-def obtener_puertas(id):
-    puertas = ControllerPuerta.getPuertasPorAlmacen(id)
-    puertas_data = [puerta.to_dict() for puerta in puertas]
-    return jsonify(puertas_data)
-
-
 @almacen_bp.route('/crear_almacen', methods=['GET', 'POST'])
 def agregar_almacen():
     if request.method == 'POST':

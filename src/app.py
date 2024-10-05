@@ -6,6 +6,7 @@ from controllers.ControllerAlmacen import ControllerAlmacen
 
 from blueprints.almacen_blueprint import almacen_bp
 from blueprints.cliente_blueprint import cliente_bp
+from blueprints.puertas_blueprint import puerta_bp
 
 app = Flask(__name__)
 
@@ -16,6 +17,7 @@ db.init_app(app)
 
 app.register_blueprint(almacen_bp)
 app.register_blueprint(cliente_bp)
+app.register_blueprint(puerta_bp)
 
 @app.route('/')
 @app.route('/index')
