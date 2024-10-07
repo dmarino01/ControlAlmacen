@@ -1,8 +1,7 @@
 from flask import Blueprint, json, request, jsonify
 
-from models import Puerta, Almacen
-
 from controllers.ControllerPuerta import ControllerPuerta
+from models import Puerta
 
 from db import db
 
@@ -18,6 +17,20 @@ def obtener_puertas(id):
 
 @puerta_bp.route('/guardarPuertas', methods=['POST'])
 def guardar_puertas():
+    data = request.json
+    almacen_id = data.get('almacenId')
+    puertas_agregadas = data.get('puertasAgregadas', [])
 
+    try:
+        for puerta in puertas_agregadas:
+            # Crear o actualizar puertas en la base de datos
+            # Ejemplo: verificar si la puerta ya existe y actualizar o crear
+            nueva_puerta = Puerta(nombre=puerta['nombre'], estado_id=1, almacen_id=almacen_id)
+            db.session.add(nueva_puerta)
 
-    return jsonify({'message': 'Puertas guardadas exitosamente'})
+        db.session.commit()
+        return jsonify({'message': 'Puertas guardadas exitosamente.'})
+
+    except Exception as e:
+        db.session.rollback()  # Deshacer cambios en caso de error
+        return jsonify({'error': str(e)}), 500

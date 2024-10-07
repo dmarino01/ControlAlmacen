@@ -214,19 +214,24 @@
         const listaPuertas = document.getElementById('listaPuertas');
         const nombrePuertaInput = document.getElementById('nombrePuerta');
         const tituloPuertas = document.getElementById('tituloPuertas');
+        const puertasForm = document.getElementById('puertasForm');
+
+        let puertasAgregadas = [];
+        let puertasEliminadas = [];
 
         agregarPuertaBtn.addEventListener('click', function () {
             const nombrePuerta = nombrePuertaInput.value.trim();
             if (nombrePuerta) {
                 const nuevaPuerta = document.createElement('li');
                 nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
-                nuevaPuerta.textContent = `${nombrePuerta}`;
+                nuevaPuerta.textContent = nombrePuerta;
 
                 const eliminarBtn = document.createElement('button');
                 eliminarBtn.className = 'btn btn-danger btn-sm';
                 eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
                 eliminarBtn.onclick = function () {
                     listaPuertas.removeChild(nuevaPuerta);
+                    puertasAgregadas = puertasAgregadas.filter(p => p.nombre !== nombrePuerta); // Remover de puertas agregadas
                     if (listaPuertas.children.length === 0) {
                         tituloPuertas.innerText = 'No hay puertas agregadas';
                     }
@@ -234,12 +239,45 @@
 
                 nuevaPuerta.appendChild(eliminarBtn);
                 listaPuertas.appendChild(nuevaPuerta);
+                puertasAgregadas.push({ nombre: nombrePuerta }); // Añadir a la lista de puertas agregadas
                 nombrePuertaInput.value = '';
                 tituloPuertas.innerText = 'Puertas Agregadas:';
             } else {
                 alert('Por favor, ingresa un nombre para la puerta.');
             }
         });
+
+        puertasForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const almacenId = document.getElementById('almacenId').value;
+            const data = {
+                almacenId: almacenId,
+                puertasAgregadas: puertasAgregadas
+            };
+
+            fetch('/guardarPuertas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    // Opcional: recargar o actualizar la página/modales.
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
     });
+
 </script>
 {% endblock customJS %}

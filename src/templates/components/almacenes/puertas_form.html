@@ -38,7 +38,8 @@
                         {% for almacen in almacenes %}
                         {% if almacen.id == almacen_id %}
                         {% for puerta in almacen.puertas %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            data-puerta-id="{{ puerta.id }}">
                             {{ puerta.nombre }}
                             <button type="button" class="btn btn-danger btn-sm"
                                 onclick="eliminarPuerta(this)">Eliminar</button>
@@ -59,4 +60,3 @@
         </div>
     </div>
 </div>
-
