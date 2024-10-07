@@ -164,6 +164,9 @@
 </script>
 
 <script>
+
+    let puertasEliminadas = [];
+
     function openPuertasModal(id = null, nombre = '') {
         const modalTitle = document.getElementById('puertasModalLabel');
         const listaPuertas = document.getElementById('listaPuertas');
@@ -189,12 +192,18 @@
                         data.forEach(puerta => {
                             const nuevaPuerta = document.createElement('li');
                             nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
-                            nuevaPuerta.textContent = puerta.nombre;
+                            nuevaPuerta.setAttribute('data-puerta-id', puerta.id); // Agrega el atributo data-puerta-id
+                            nuevaPuerta.textContent = `${puerta.nombre} - ${puerta.id}`; // Muestra el nombre y el ID
 
                             const eliminarBtn = document.createElement('button');
                             eliminarBtn.className = 'btn btn-danger btn-sm';
                             eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
                             eliminarBtn.onclick = function () {
+                                // Agregar el ID a la lista de puertas eliminadas
+                                puertasEliminadas.push(puerta.id);
+                                console.log(`Puerta eliminada ID: ${puerta.id}`);
+
+                                // Eliminar el elemento de la lista
                                 listaPuertas.removeChild(nuevaPuerta);
                             };
 
@@ -209,6 +218,7 @@
         }
     }
 
+
     document.addEventListener('DOMContentLoaded', function () {
         const agregarPuertaBtn = document.getElementById('agregarPuerta');
         const listaPuertas = document.getElementById('listaPuertas');
@@ -217,7 +227,6 @@
         const puertasForm = document.getElementById('puertasForm');
 
         let puertasAgregadas = [];
-        let puertasEliminadas = [];
 
         agregarPuertaBtn.addEventListener('click', function () {
             const nombrePuerta = nombrePuertaInput.value.trim();
@@ -226,12 +235,24 @@
                 nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
                 nuevaPuerta.textContent = nombrePuerta;
 
-                const eliminarBtn = document.createElement('button');
+                // Asigna un ID temporal (esto debe ser reemplazado con el ID real después de guardarlo)
+                const puertaId = Date.now(); // Genera un ID único, pero deberías usar un ID real
+                nuevaPuerta.setAttribute('data-puerta-id', puertaId); // Asigna el ID a la puerta
+
+                const eliminarBtn = document.createElement('button'); // Crear el botón aquí
                 eliminarBtn.className = 'btn btn-danger btn-sm';
                 eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
+
                 eliminarBtn.onclick = function () {
+                    const puertaId = nuevaPuerta.getAttribute('data-puerta-id'); // Obtén el ID de la puerta
+                    console.log(`Eliminando puerta con ID: ${puertaId}`); // Verifica el ID antes de agregar
+                    if (puertaId) {
+                        puertasEliminadas.push(puertaId); // Agrega el ID a la lista de puertas eliminadas
+                        console.log(`Puertas eliminadas después de agregar: ${puertasEliminadas}`);
+                    }
                     listaPuertas.removeChild(nuevaPuerta);
                     puertasAgregadas = puertasAgregadas.filter(p => p.nombre !== nombrePuerta); // Remover de puertas agregadas
+
                     if (listaPuertas.children.length === 0) {
                         tituloPuertas.innerText = 'No hay puertas agregadas';
                     }
@@ -253,8 +274,15 @@
             const almacenId = document.getElementById('almacenId').value;
             const data = {
                 almacenId: almacenId,
-                puertasAgregadas: puertasAgregadas
+                puertasAgregadas: puertasAgregadas,
+                puertasEliminadas: puertasEliminadas // Asegúrate de incluir esto
             };
+
+            console.log(data); // Imprimir data para depuración
+
+            if (puertasEliminadas.length === 0) {
+                console.log('No hay puertas eliminadas'); // Verifica si está vacío
+            }
 
             fetch('/guardarPuertas', {
                 method: 'POST',
@@ -264,18 +292,18 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message);
-                    // Opcional: recargar o actualizar la página/modales.
-                } else if (data.error) {
-                    alert(data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        // Opcional: recargar o actualizar la página/modales.
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     });
 

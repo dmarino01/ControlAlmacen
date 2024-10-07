@@ -18,19 +18,28 @@ def obtener_puertas(id):
 @puerta_bp.route('/guardarPuertas', methods=['POST'])
 def guardar_puertas():
     data = request.json
+
+    print(data)
+
     almacen_id = data.get('almacenId')
     puertas_agregadas = data.get('puertasAgregadas', [])
-
+    puertas_eliminadas = data.get('puertasEliminadas', [])
+    
     try:
+        # Asegúrate de no modificar contratos aquí
         for puerta in puertas_agregadas:
-            # Crear o actualizar puertas en la base de datos
-            # Ejemplo: verificar si la puerta ya existe y actualizar o crear
-            nueva_puerta = Puerta(nombre=puerta['nombre'], estado_id=1, almacen_id=almacen_id)
+            nueva_puerta = Puerta(nombre=puerta['nombre'], estado_id=1, almacen_id=almacen_id)  # Ajusta según tus requisitos
             db.session.add(nueva_puerta)
 
+        for puerta_id in puertas_eliminadas:
+            puerta_a_eliminar = Puerta.query.get(puerta_id)
+            if puerta_a_eliminar:
+                db.session.delete(puerta_a_eliminar)
+
         db.session.commit()
-        return jsonify({'message': 'Puertas guardadas exitosamente.'})
+        return jsonify({"message": "Puertas guardadas exitosamente."})
 
     except Exception as e:
-        db.session.rollback()  # Deshacer cambios en caso de error
-        return jsonify({'error': str(e)}), 500
+        db.session.rollback()
+        print("Error:", e)
+        return jsonify({"error": "Error al guardar puertas."}), 500
