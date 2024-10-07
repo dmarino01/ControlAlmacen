@@ -34,20 +34,7 @@
                     </div>
 
                     <h5 id="tituloPuertas" class="mt-4">Puertas Agregadas:</h5>
-                    <ul id="listaPuertas" class="list-group">
-                        {% for almacen in almacenes %}
-                        {% if almacen.id == almacen_id %}
-                        {% for puerta in almacen.puertas %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center"
-                            data-puerta-id="{{ puerta.id }}">
-                            {{ puerta.nombre }} - {{ puerta.id }} <!-- Agrega esta línea -->
-                            <button type="button" class="btn btn-danger btn-sm"
-                                onclick="eliminarPuerta(this)">Eliminar</button>
-                        </li>
-                        {% endfor %}
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
+                    <ul id="listaPuertas" class="list-group"></ul>
                 </form>
             </div>
             <div class="modal-footer">

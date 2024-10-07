@@ -193,7 +193,7 @@
                             const nuevaPuerta = document.createElement('li');
                             nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
                             nuevaPuerta.setAttribute('data-puerta-id', puerta.id); // Agrega el atributo data-puerta-id
-                            nuevaPuerta.textContent = `${puerta.nombre} - ${puerta.id}`; // Muestra el nombre y el ID
+                            nuevaPuerta.textContent = `${puerta.nombre}`; // Muestra el nombre y el ID
 
                             const eliminarBtn = document.createElement('button');
                             eliminarBtn.className = 'btn btn-danger btn-sm';
@@ -295,8 +295,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.message) {
-                        alert(data.message);
-                        // Opcional: recargar o actualizar la página/modales.
+                        //alert(data.message);
+                        location.reload();
                     } else if (data.error) {
                         alert(data.error);
                     }

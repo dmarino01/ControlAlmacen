@@ -1,4 +1,4 @@
-from flask import Blueprint, json, request, jsonify
+from flask import Blueprint, flash, json, request, jsonify
 
 from controllers.ControllerPuerta import ControllerPuerta
 from models import Puerta
@@ -19,8 +19,6 @@ def obtener_puertas(id):
 def guardar_puertas():
     data = request.json
 
-    print(data)
-
     almacen_id = data.get('almacenId')
     puertas_agregadas = data.get('puertasAgregadas', [])
     puertas_eliminadas = data.get('puertasEliminadas', [])
@@ -37,9 +35,12 @@ def guardar_puertas():
                 db.session.delete(puerta_a_eliminar)
 
         db.session.commit()
+        flash("Puertas guardadas exitosamente.", "success")
         return jsonify({"message": "Puertas guardadas exitosamente."})
 
     except Exception as e:
         db.session.rollback()
         print("Error:", e)
         return jsonify({"error": "Error al guardar puertas."}), 500
+    
+    
