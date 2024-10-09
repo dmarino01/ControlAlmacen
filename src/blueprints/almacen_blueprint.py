@@ -20,7 +20,13 @@ def agregar_almacen():
     if request.method == 'POST':
         # Recibir los datos del formulario
         nombre_almacen = request.form['almacenNombre']
-        css_detalles = {}
+        css_detalles = {
+            'top': 0,
+            'leftPos': 0,
+            'width': 0,
+            'height': 0,
+            'color': '#000000'
+        }
 
         if request.form.get('top'):
             css_detalles['top'] = request.form['top']
@@ -38,7 +44,8 @@ def agregar_almacen():
             if css_detalles:
                 ControllerCSSDetalles.createCSSDetalles(almacen_id, css_detalles)
         except Exception as e:
-            flash(f'Error al crear el almacen: {str(e)}', 'error')
+            #flash(f'Error al crear el almacen: {str(e)}', 'error')
+            raise e
         return redirect(url_for('almacen.almacenes'))
 
 
@@ -48,10 +55,10 @@ def editar_almacen(id):
         nombre_almacen = request.form['almacenNombre']
 
         css_detalles = {
-            'top': '0',
-            'leftPos': '0',
-            'width': '0',
-            'height': '0',
+            'top': 0,
+            'leftPos': 0,
+            'width': 0,
+            'height': 0,
             'color': '#000000'
         }
 

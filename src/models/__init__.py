@@ -5,3 +5,4 @@ from .Puerta import Puerta
 from .PuertaEstado import PuertaEstado
 from .Contrato import Contrato
 from .Cliente import Cliente
+from .Empresa import Empresa

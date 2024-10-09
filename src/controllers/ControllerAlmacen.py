@@ -24,7 +24,7 @@ class ControllerAlmacen:
             db.session.add(nuevo_almacen)
             db.session.commit()
             flash('¡Almacen creado exitosamente!', 'success')
-            return nuevo_almacen
+            return nuevo_almacen.id
         except exc.IntegrityError:
             db.session.rollback()
             flash('Error de integridad: el almacen ya existe.', 'error')

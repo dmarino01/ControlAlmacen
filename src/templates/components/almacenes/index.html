@@ -26,6 +26,7 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    <th>Empresa</th>
                     <th>N° de Puertas</th>
                     <th>Acción</th>
                 </tr>
@@ -34,6 +35,7 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    <th>Empresa</th>
                     <th>N° de Puertas</th>
                     <th>Acción</th>
                 </tr>
@@ -43,6 +45,7 @@
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.nombre }}</td>
+                    <td>{{ item.empresa.nombre }}</td>
                     <td>{{ item.numero_de_puertas }}</td>
                     <td class="col-3">
                         <a class="btn btn-sm btn-primary" title="Asignar Puertas" data-bs-toggle="modal"
@@ -85,7 +88,6 @@
 <script>
     const modalAlmacen = document.getElementById('almacenModal');
     const modalPuertas = document.getElementById('puertasModal');
-
     const almacenModal = new bootstrap.Modal(modalAlmacen);
     const puertasModal = new bootstrap.Modal(modalPuertas);
 
@@ -170,7 +172,7 @@
     function openPuertasModal(id = null, nombre = '') {
         const modalTitle = document.getElementById('puertasModalLabel');
         const listaPuertas = document.getElementById('listaPuertas');
-        const almacenId = document.getElementById('almacenId');  // Asegúrate de que este input esté presente en tu modal
+        const almacenId = document.getElementById('almacenId');
 
         if (id) {
             modalTitle.innerText = `Asignar Puertas a Almacén ${nombre}`;
@@ -178,6 +180,7 @@
 
             // Limpiar la lista de puertas
             listaPuertas.innerHTML = '';
+            document.getElementById('mensajeSinPuertas').style.display = 'none';
 
             // Realizar una llamada AJAX para obtener las puertas
             fetch(`/almacenes/${id}/puertas`)
@@ -192,19 +195,16 @@
                         data.forEach(puerta => {
                             const nuevaPuerta = document.createElement('li');
                             nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
-                            nuevaPuerta.setAttribute('data-puerta-id', puerta.id); // Agrega el atributo data-puerta-id
-                            nuevaPuerta.textContent = `${puerta.nombre}`; // Muestra el nombre y el ID
+                            nuevaPuerta.setAttribute('data-puerta-id', puerta.id);
+                            nuevaPuerta.textContent = `${puerta.nombre}`;
 
                             const eliminarBtn = document.createElement('button');
                             eliminarBtn.className = 'btn btn-danger btn-sm';
                             eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
                             eliminarBtn.onclick = function () {
-                                // Agregar el ID a la lista de puertas eliminadas
                                 puertasEliminadas.push(puerta.id);
-                                console.log(`Puerta eliminada ID: ${puerta.id}`);
-
-                                // Eliminar el elemento de la lista
                                 listaPuertas.removeChild(nuevaPuerta);
+                                actualizarMensajePuertas(); // Llamar para actualizar el mensaje
                             };
 
                             nuevaPuerta.appendChild(eliminarBtn);
@@ -212,9 +212,21 @@
                         });
                     } else {
                         listaPuertas.innerHTML = '<li class="list-group-item">No hay puertas disponibles</li>';
+                        mensajeSinPuertas.style.display = 'block'; // Mostrar mensaje
                     }
                 })
                 .catch(error => console.error('Error al obtener las puertas:', error));
+        }
+    }
+
+    function actualizarMensajePuertas() {
+        const listaPuertas = document.getElementById('listaPuertas');
+        const mensajeSinPuertas = document.getElementById('mensajeSinPuertas');
+        // Si la lista está vacía, mostrar el mensaje
+        if (listaPuertas.children.length === 0) {
+            mensajeSinPuertas.style.display = 'block'; // Mostrar mensaje
+        } else {
+            mensajeSinPuertas.style.display = 'none'; // Ocultar mensaje
         }
     }
 </script>
@@ -229,16 +241,6 @@
 
         let puertasAgregadas = [];
 
-        // Función para actualizar la visibilidad del mensaje "No hay puertas disponibles"
-        function actualizarMensajePuertas() {
-            // Comprueba si la lista de puertas está vacía
-            if (listaPuertas.children.length === 0) {
-                mensajeSinPuertas.style.display = 'block'; // Muestra el mensaje
-            } else {
-                mensajeSinPuertas.style.display = 'none'; // Oculta el mensaje
-            }
-        }
-
         agregarPuertaBtn.addEventListener('click', function () {
             const nombrePuerta = nombrePuertaInput.value.trim();
             if (nombrePuerta) {
@@ -246,41 +248,36 @@
                 nuevaPuerta.className = 'list-group-item d-flex justify-content-between align-items-center';
                 nuevaPuerta.textContent = nombrePuerta;
 
-                // Asigna un ID temporal (esto debe ser reemplazado con el ID real después de guardarlo)
-                const puertaId = Date.now(); // Genera un ID único, pero deberías usar un ID real
-                nuevaPuerta.setAttribute('data-puerta-id', puertaId); // Asigna el ID a la puerta
+                const puertaId = Date.now();
+                nuevaPuerta.setAttribute('data-puerta-id', puertaId);
 
-                const eliminarBtn = document.createElement('button'); // Crear el botón aquí
+                const eliminarBtn = document.createElement('button');
                 eliminarBtn.className = 'btn btn-danger btn-sm';
                 eliminarBtn.innerHTML = '<i class="fa fa-trash"></i>';
 
                 eliminarBtn.onclick = function () {
-                    const puertaId = nuevaPuerta.getAttribute('data-puerta-id'); // Obtén el ID de la puerta
-                    console.log(`Eliminando puerta con ID: ${puertaId}`); // Verifica el ID antes de agregar
+                    const puertaId = nuevaPuerta.getAttribute('data-puerta-id');
+                    console.log(`Eliminando puerta con ID: ${puertaId}`);
                     if (puertaId) {
-                        puertasEliminadas.push(puertaId); // Agrega el ID a la lista de puertas eliminadas
+                        puertasEliminadas.push(puertaId);
                         console.log(`Puertas eliminadas después de agregar: ${puertasEliminadas}`);
                     }
                     listaPuertas.removeChild(nuevaPuerta);
-                    puertasAgregadas = puertasAgregadas.filter(p => p.nombre !== nombrePuerta); // Remover de puertas agregadas
-                    
-                    actualizarMensajePuertas(); // Actualiza el mensaje después de eliminar
+                    puertasAgregadas = puertasAgregadas.filter(p => p.nombre !== nombrePuerta);
+
+                    actualizarMensajePuertas(); // Actualiza el mensaje al eliminar
                 };
 
                 nuevaPuerta.appendChild(eliminarBtn);
                 listaPuertas.appendChild(nuevaPuerta);
-                puertasAgregadas.push({ nombre: nombrePuerta }); // Añadir a la lista de puertas agregadas
+                puertasAgregadas.push({ nombre: nombrePuerta });
                 nombrePuertaInput.value = '';
                 tituloPuertas.innerText = 'Puertas Agregadas:';
-
-                actualizarMensajePuertas(); // Actualiza el mensaje después de agregar
+                mensajeSinPuertas.style.display = 'none'; // Ocultar mensaje al agregar
             } else {
                 alert('Por favor, ingresa un nombre para la puerta.');
             }
         });
-
-        // Al cargar el formulario, verifica si hay puertas
-        actualizarMensajePuertas(); // Llama a la función al cargar la página
 
         puertasForm.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -289,14 +286,8 @@
             const data = {
                 almacenId: almacenId,
                 puertasAgregadas: puertasAgregadas,
-                puertasEliminadas: puertasEliminadas // Asegúrate de incluir esto
+                puertasEliminadas: puertasEliminadas
             };
-
-            console.log(data); // Imprimir data para depuración
-
-            if (puertasEliminadas.length === 0) {
-                console.log('No hay puertas eliminadas'); // Verifica si está vacío
-            }
 
             fetch('/guardarPuertas', {
                 method: 'POST',
@@ -309,7 +300,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.message) {
-                        //alert(data.message);
                         location.reload();
                     } else if (data.error) {
                         alert(data.error);
