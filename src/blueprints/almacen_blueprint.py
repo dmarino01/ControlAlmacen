@@ -66,8 +66,7 @@ def editar_almacen(id):
             else:
                 ControllerCSSDetalles.updateCSSDetalles(id, {})
         except Exception as e:
-            #flash(f'Error al actualizar el almacen: {str(e)}', 'error')
-            raise e
+            flash(f'Error al actualizar el almacen: {str(e)}', 'error')
         return redirect(url_for('almacen.almacenes'))
 
 
