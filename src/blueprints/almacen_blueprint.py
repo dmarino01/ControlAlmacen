@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, jsonify, render_template, request, redirect, url_for, flash
 from controllers.ControllerAlmacen import ControllerAlmacen
 from controllers.ControllerCSSDetalles import ControllerCSSDetalles
 from controllers.ControllerPuertaEstados import ControllerPuertaEstados
+from controllers.ControllerEmpresa import ControllerEmpresa
 
 from db import db
 
@@ -12,7 +13,8 @@ almacen_bp = Blueprint('almacen', __name__)
 def almacenes():
     data = ControllerAlmacen.getAlmacenes()
     estadoPuertas = ControllerPuertaEstados.getPuertaEstados()
-    return render_template('components/almacenes/index.html', almacenes=data, estadoPuertas=estadoPuertas)
+    empresas = ControllerEmpresa.getEmpresas()
+    return render_template('components/almacenes/index.html', almacenes=data, estadoPuertas=estadoPuertas, empresas=empresas)
 
 
 @almacen_bp.route('/crear_almacen', methods=['GET', 'POST'])

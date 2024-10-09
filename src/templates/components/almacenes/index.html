@@ -57,6 +57,7 @@
                             onclick="openAlmacenModal(
                             {{ item.id }},
                             '{{ item.nombre }}',
+                            {{ item.empresa_id }},
                             {{ item.almacenCSSDetalles[0].top }},
                             {{ item.almacenCSSDetalles[0].left_pos }},
                             {{ item.almacenCSSDetalles[0].width }},
@@ -137,11 +138,12 @@
 </script>
 
 <script>
-    function openAlmacenModal(id = null, nombre = '', top = '', leftPos = '', width = '', height = '', color = '') {
+    function openAlmacenModal(id = null, nombre = '', empresa_id = '', top = '', leftPos = '', width = '', height = '', color = '') {
         const modalTitle = document.getElementById('almacenModalLabel');
         const almacenForm = document.getElementById('almacenForm');
         const almacenId = document.getElementById('almacenId');
         const almacenNombre = document.getElementById('almacenNombre');
+        const almacenEmpresa = document.getElementById('almacenEmpresa');
         const detalleTop = document.getElementById('top');
         const detalleLeftPos = document.getElementById('leftPos');
         const detalleWidth = document.getElementById('width');
@@ -157,6 +159,7 @@
         }
         almacenId.value = id || '';
         almacenNombre.value = nombre || '';
+        almacenEmpresa.value = empresa_id || '';
         detalleTop.value = top || '';
         detalleLeftPos.value = leftPos || '';
         detalleWidth.value = width || '';

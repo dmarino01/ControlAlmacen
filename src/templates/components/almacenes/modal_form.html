@@ -10,9 +10,21 @@
                 <form id="almacenForm" method="POST" action="#">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="almacenId" name="id">
-                    <div class="mb-3">
-                        <label for="almacenNombre" class="form-label">Nombre del Almacén</label>
-                        <input type="text" class="form-control" id="almacenNombre" name="almacenNombre" required>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="almacenNombre" class="form-label">Nombre del Almacén</label>
+                            <input type="text" class="form-control" id="almacenNombre" name="almacenNombre" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="almacenEmpresa" class="form-label">Empresa del Almacén</label>
+                            <select class="form-control" id="almacenEmpresa" name="almacenEmpresa" required>
+                                <option value="" disabled selected>Selecciona una empresa</option>
+                                {% for empresa in empresas %}
+                                <option value="{{ empresa.id }}">{{ empresa.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Sección de Detalles CSS -->
@@ -34,7 +46,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="leftPos" class="form-label">Posición Izquierda (px)</label>
-                                            <input type="number" class="form-control" id="leftPos" name="leftPos" value="0">
+                                            <input type="number" class="form-control" id="leftPos" name="leftPos"
+                                                value="0">
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -44,13 +57,15 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="height" class="form-label">Altura (px)</label>
-                                            <input type="number" class="form-control" id="height" name="height" value="0">
+                                            <input type="number" class="form-control" id="height" name="height"
+                                                value="0">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="color" class="form-label">Color</label>
                                         <div class="col-2">
-                                            <input type="color" class="form-control" id="color" name="color" value="#000000">
+                                            <input type="color" class="form-control" id="color" name="color"
+                                                value="#000000">
                                         </div>
                                     </div>
                                 </div>
