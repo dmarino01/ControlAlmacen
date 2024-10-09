@@ -21,7 +21,8 @@ def almacenes():
 def agregar_almacen():
     if request.method == 'POST':
         # Recibir los datos del formulario
-        nombre_almacen = request.form['almacenNombre']
+        nombre = request.form['almacenNombre']
+        empresa_id = request.form['almacenEmpresa']
         css_detalles = {
             'top': 0,
             'leftPos': 0,
@@ -42,7 +43,7 @@ def agregar_almacen():
             css_detalles['color'] = request.form['color']
         # Guardar los datos usando los controladores
         try:
-            almacen_id = ControllerAlmacen.createAlmacen(nombre_almacen)
+            almacen_id = ControllerAlmacen.createAlmacen(nombre, empresa_id)
             if css_detalles:
                 ControllerCSSDetalles.createCSSDetalles(almacen_id, css_detalles)
         except Exception as e:
@@ -54,7 +55,8 @@ def agregar_almacen():
 @almacen_bp.route('/editar_almacen/<int:id>', methods=['GET', 'POST'])
 def editar_almacen(id):
     if request.method == 'POST':
-        nombre_almacen = request.form['almacenNombre']
+        nombre = request.form['almacenNombre']
+        empresa_id = request.form['almacenEmpresa']
 
         css_detalles = {
             'top': 0,
@@ -75,7 +77,7 @@ def editar_almacen(id):
         if request.form.get('color'):
             css_detalles['color'] = request.form['color']
         try:
-            almacen_id = ControllerAlmacen.updateAlmacen(id, nombre_almacen)
+            almacen_id = ControllerAlmacen.updateAlmacen(id, nombre, empresa_id)
             if css_detalles:
                 ControllerCSSDetalles.updateCSSDetalles(id, css_detalles)
             else:

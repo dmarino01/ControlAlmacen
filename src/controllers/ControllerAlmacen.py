@@ -18,8 +18,8 @@ class ControllerAlmacen:
             return []
 
     @classmethod
-    def createAlmacen(cls, nombre):
-        nuevo_almacen = Almacen(nombre=nombre)
+    def createAlmacen(cls, nombre, empresa_id):
+        nuevo_almacen = Almacen(nombre=nombre, empresa_id=empresa_id)
         try:
             db.session.add(nuevo_almacen)
             db.session.commit()
@@ -34,12 +34,13 @@ class ControllerAlmacen:
             raise e
 
     @classmethod
-    def updateAlmacen(cls, id, nombre):
+    def updateAlmacen(cls, id, nombre, empresa_id):
         try:
             almacen = Almacen.query.get(id)
             if not almacen:
                 raise ValueError("Almacen no encontrado.")
             almacen.nombre = nombre
+            almacen.empresa_id = empresa_id
             db.session.commit()
             flash('¡Almacen actualizado exitosamente', 'success')
             return almacen
