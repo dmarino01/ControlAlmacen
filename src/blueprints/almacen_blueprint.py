@@ -47,7 +47,13 @@ def editar_almacen(id):
     if request.method == 'POST':
         nombre_almacen = request.form['almacenNombre']
 
-        css_detalles = {}
+        css_detalles = {
+            'top': '0',
+            'leftPos': '0',
+            'width': '0',
+            'height': '0',
+            'color': '#000000'
+        }
 
         if request.form.get('top'):
             css_detalles['top'] = request.form['top']
