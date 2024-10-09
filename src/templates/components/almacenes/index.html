@@ -217,16 +217,27 @@
                 .catch(error => console.error('Error al obtener las puertas:', error));
         }
     }
-
-
+</script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         const agregarPuertaBtn = document.getElementById('agregarPuerta');
         const listaPuertas = document.getElementById('listaPuertas');
         const nombrePuertaInput = document.getElementById('nombrePuerta');
         const tituloPuertas = document.getElementById('tituloPuertas');
         const puertasForm = document.getElementById('puertasForm');
+        const mensajeSinPuertas = document.getElementById('mensajeSinPuertas');
 
         let puertasAgregadas = [];
+
+        // Función para actualizar la visibilidad del mensaje "No hay puertas disponibles"
+        function actualizarMensajePuertas() {
+            // Comprueba si la lista de puertas está vacía
+            if (listaPuertas.children.length === 0) {
+                mensajeSinPuertas.style.display = 'block'; // Muestra el mensaje
+            } else {
+                mensajeSinPuertas.style.display = 'none'; // Oculta el mensaje
+            }
+        }
 
         agregarPuertaBtn.addEventListener('click', function () {
             const nombrePuerta = nombrePuertaInput.value.trim();
@@ -252,10 +263,8 @@
                     }
                     listaPuertas.removeChild(nuevaPuerta);
                     puertasAgregadas = puertasAgregadas.filter(p => p.nombre !== nombrePuerta); // Remover de puertas agregadas
-
-                    if (listaPuertas.children.length === 0) {
-                        tituloPuertas.innerText = 'No hay puertas agregadas';
-                    }
+                    
+                    actualizarMensajePuertas(); // Actualiza el mensaje después de eliminar
                 };
 
                 nuevaPuerta.appendChild(eliminarBtn);
@@ -263,10 +272,15 @@
                 puertasAgregadas.push({ nombre: nombrePuerta }); // Añadir a la lista de puertas agregadas
                 nombrePuertaInput.value = '';
                 tituloPuertas.innerText = 'Puertas Agregadas:';
+
+                actualizarMensajePuertas(); // Actualiza el mensaje después de agregar
             } else {
                 alert('Por favor, ingresa un nombre para la puerta.');
             }
         });
+
+        // Al cargar el formulario, verifica si hay puertas
+        actualizarMensajePuertas(); // Llama a la función al cargar la página
 
         puertasForm.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -306,6 +320,5 @@
                 });
         });
     });
-
 </script>
 {% endblock customJS %}

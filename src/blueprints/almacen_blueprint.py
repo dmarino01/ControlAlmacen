@@ -61,9 +61,13 @@ def editar_almacen(id):
             css_detalles['color'] = request.form['color']
         try:
             almacen_id = ControllerAlmacen.updateAlmacen(id, nombre_almacen)
-            ControllerCSSDetalles.updateCSSDetalles(id, css_detalles)
+            if css_detalles:
+                ControllerCSSDetalles.updateCSSDetalles(id, css_detalles)
+            else:
+                ControllerCSSDetalles.updateCSSDetalles(id, {})
         except Exception as e:
-            flash(f'Error al actualizar el almacen: {str(e)}', 'error')
+            #flash(f'Error al actualizar el almacen: {str(e)}', 'error')
+            raise e
         return redirect(url_for('almacen.almacenes'))
 
 
