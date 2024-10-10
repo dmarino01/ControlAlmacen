@@ -1,4 +1,4 @@
-from models import Almacen
+from models import Almacen, Puerta, ContratoPuertas, Contrato
 from db import db
 from sqlalchemy import exc
 from sqlalchemy.orm import joinedload
@@ -10,8 +10,12 @@ class ControllerAlmacen:
     @classmethod
     def getAlmacenes(cls):
         try:
-            almacenes = Almacen.query.filter_by(is_deleted=False).options(
-                joinedload(Almacen.almacenCSSDetalles)).all()
+            almacenes = Almacen.query.options(
+                joinedload(Almacen.puertas)
+                .joinedload(Puerta.contrato_puertas)
+                .joinedload(ContratoPuertas.contrato)
+                .joinedload(Contrato.cliente)
+            ).all()
             return almacenes
         except Exception as e:
             print(f"Error fetching almacenes: {e}")

@@ -23,13 +23,19 @@
         </div>
         <div class="info-box" id="info-box-{{ item.id }}"
             style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
-            Puertas del Almacén '{{ item.nombre }}'
+            Puertas - Almacén '{{ item.nombre }}'
             <div class="info-content">
                 {% for puerta in item.puertas %}
                 <div class="info-item">
                     {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
-                    {% if puerta.contrato %}
-                    - {{ puerta.contrato.cliente.nombre }}
+                    {% if puerta.contrato_puertas %}
+                    {% for contrato_puerta in puerta.contrato_puertas %}
+                    {% if contrato_puerta.contrato.cliente %}
+                    - {{ contrato_puerta.contrato.cliente.nombre }}
+                    {% else %}
+                    - SIN CLIENTE
+                    {% endif %}
+                    {% endfor %}
                     {% else %}
                     - SIN CLIENTE
                     {% endif %}

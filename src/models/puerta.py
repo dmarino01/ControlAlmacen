@@ -10,7 +10,7 @@ class Puerta(db.Model):
 
     #Relationships
     estado = db.relationship('PuertaEstado', back_populates='puertas') 
-    contrato = db.relationship('Contrato', back_populates='puerta', lazy=True, uselist=False)
+    contrato_puertas = db.relationship('ContratoPuertas', back_populates='puerta')
     almacen = db.relationship('Almacen', back_populates='puertas', lazy=True)
 
     def __init__(self, nombre, estado_id, almacen_id):
@@ -31,6 +31,5 @@ class Puerta(db.Model):
             f"<Puerta id={self.id}, "
             f"nombre={self.nombre}, "
             f"estado_id={self.estado_id}, "
-            f"almacen_id={self.almacen_id}, "
-            f"contrato={self.contrato}>"
+            f"almacen_id={self.almacen_id}>"
         )
