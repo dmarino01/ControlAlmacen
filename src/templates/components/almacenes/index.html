@@ -176,6 +176,7 @@
         const modalTitle = document.getElementById('puertasModalLabel');
         const listaPuertas = document.getElementById('listaPuertas');
         const almacenId = document.getElementById('almacenId');
+        const mensajeSinPuertas = document.getElementById('mensajeSinPuertas'); // Obtener referencia aquí
 
         if (id) {
             modalTitle.innerText = `Asignar Puertas a Almacén ${nombre}`;
@@ -183,7 +184,11 @@
 
             // Limpiar la lista de puertas
             listaPuertas.innerHTML = '';
-            document.getElementById('mensajeSinPuertas').style.display = 'none';
+
+            // Asegurarse que mensajeSinPuertas existe antes de trabajar con él
+            if (mensajeSinPuertas) {
+                mensajeSinPuertas.style.display = 'none';
+            }
 
             // Realizar una llamada AJAX para obtener las puertas
             fetch(`/almacenes/${id}/puertas`)
@@ -215,7 +220,9 @@
                         });
                     } else {
                         listaPuertas.innerHTML = '<li class="list-group-item">No hay puertas disponibles</li>';
-                        mensajeSinPuertas.style.display = 'block'; // Mostrar mensaje
+                        if (mensajeSinPuertas) {
+                            mensajeSinPuertas.style.display = 'block'; // Mostrar mensaje
+                        }
                     }
                 })
                 .catch(error => console.error('Error al obtener las puertas:', error));

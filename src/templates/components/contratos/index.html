@@ -128,7 +128,6 @@
     $(document).ready(function () {
         $('#almacen').on('change.select2', function () {
             var almacenId = $(this).val();
-            console.log("Almacen seleccionado: " + almacenId);
             // Realiza la petición AJAX para obtener las puertas del almacén
             fetch(`/almacen/` + almacenId + `/puertas`)
                 .then(response => response.json())

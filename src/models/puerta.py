@@ -13,7 +13,7 @@ class Puerta(db.Model):
     contrato_puertas = db.relationship('ContratoPuertas', back_populates='puerta')
     almacen = db.relationship('Almacen', back_populates='puertas', lazy=True)
 
-    def __init__(self, nombre, estado_id, almacen_id):
+    def __init__(self, nombre, almacen_id, estado_id=1):
         self.nombre = nombre
         self.estado_id = estado_id
         self.almacen_id = almacen_id

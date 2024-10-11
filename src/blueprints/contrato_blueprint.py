@@ -18,7 +18,7 @@ def contratos():
 @contrato_bp.route('/almacen/<int:id>/puertas')
 def get_puertas_by_almacen(id):
     try:
-        puertas = ControllerPuerta.getPuertasLibresPorAlmacenId(id)
+        puertas = ControllerPuerta.getPuertasPorAlmacen(id, 1)
         puertas_data = [{'id': puerta.id, 'nombre': puerta.nombre} for puerta in puertas]
         return jsonify(puertas_data)
     except Exception as e:

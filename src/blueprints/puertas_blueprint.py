@@ -10,8 +10,9 @@ puerta_bp = Blueprint('puerta', __name__)
 
 @puerta_bp.route('/almacenes/<int:id>/puertas', methods=['GET'])
 def obtener_puertas(id):
-    puertas = ControllerPuerta.getPuertasPorAlmacen(id)
+    puertas = ControllerPuerta.getPuertasPorAlmacen(id, None)
     puertas_data = [puerta.to_dict() for puerta in puertas]
+    print(puertas_data)
     return jsonify(puertas_data)
 
 
@@ -26,11 +27,10 @@ def guardar_puertas():
     try:
         # Asegúrate de no modificar contratos aquí
         for puerta in puertas_agregadas:
-            nueva_puerta = Puerta(nombre=puerta['nombre'], estado_id=1, almacen_id=almacen_id)  # Ajusta según tus requisitos
-            db.session.add(nueva_puerta)
+            nueva_puerta = ControllerPuerta.createPuertas(puerta['nombre'], almacen_id)
 
         for puerta_id in puertas_eliminadas:
-            puerta_a_eliminar = Puerta.query.get(puerta_id)
+            puerta_a_eliminar = ControllerPuerta.getPuertaPorId(puerta_id)
             if puerta_a_eliminar:
                 db.session.delete(puerta_a_eliminar)
 
