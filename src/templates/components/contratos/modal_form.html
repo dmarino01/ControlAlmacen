@@ -1,0 +1,70 @@
+<div class="modal fade" id="contratoModal" tabindex="-1" aria-labelledby="contratoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contratoModalLabel">Crear Nuevo Contrato</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="contratoForm" method="POST" action="#">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="contratoId" name="id">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="cliente" class="form-label">Cliente</label>
+                            <select class="form-control select2" id="cliente" name="cliente" required>
+                                <option value="" disabled selected>Selecciona un cliente...</option>
+                                {% for item in clientes %}
+                                <option value="{{ item.id }}">{{ item.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="renta" class="form-label">Renta Mensual (S/.)</label>
+                            <input type="text" class="form-control" id="renta" name="renta" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="almacen" class="form-label">Almacen</label>
+                            <select class="form-control select2" id="almacen" name="almacen">
+                                <option value="" disabled selected>Selecciona un almacen...</option>
+                                {% for item in almacenes %}
+                                <option value="{{ item.id }}">{{ item.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
+                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="fecha_final" class="form-label">Fecha Final</label>
+                            <input type="date" class="form-control" id="fecha_final" name="fecha_final" required>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="puertas">Seleccionar Puertas</label>
+                            <div id="puertasContainer">
+                                <!-- Aquí se agregarán los checkboxes dinámicamente con JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-xmark"></i>
+                    Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="contratoForm"><i class="fa fa-save"></i>
+                    Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

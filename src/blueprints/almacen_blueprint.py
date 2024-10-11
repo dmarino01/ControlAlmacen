@@ -1,10 +1,9 @@
-from flask import Blueprint, jsonify, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from controllers.ControllerAlmacen import ControllerAlmacen
 from controllers.ControllerCSSDetalles import ControllerCSSDetalles
 from controllers.ControllerPuertaEstados import ControllerPuertaEstados
 from controllers.ControllerEmpresa import ControllerEmpresa
 
-from db import db
 
 almacen_bp = Blueprint('almacen', __name__)
 

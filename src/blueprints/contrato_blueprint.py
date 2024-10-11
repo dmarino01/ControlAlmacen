@@ -1,12 +1,26 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from controllers.ControllerContrato import ControllerContrato
-from sqlalchemy import exc
+from controllers.ControllerCliente import ControllerCliente
+from controllers.ControllerAlmacen import ControllerAlmacen
+from controllers.ControllerPuerta import ControllerPuerta
 
-from db import db
 
 contrato_bp = Blueprint('contrato', __name__)
 
 @contrato_bp.route('/contratos')
 def contratos():
     data = ControllerContrato.getContratos()
-    return render_template('components/contratos/index.html', contratos=data)
+    clientes = ControllerCliente.getClientes()
+    almacenes = ControllerAlmacen.getAlmacenes()
+    return render_template('components/contratos/index.html', contratos=data, clientes=clientes, almacenes=almacenes)
+
+
+@contrato_bp.route('/almacen/<int:id>/puertas')
+def get_puertas_by_almacen(id):
+    try:
+        puertas = ControllerPuerta.getPuertasLibresPorAlmacenId(id)
+        puertas_data = [{'id': puerta.id, 'nombre': puerta.nombre} for puerta in puertas]
+        return jsonify(puertas_data)
+    except Exception as e:
+        print(f"Error fetching puertas: {e}")
+        return jsonify([]), 500

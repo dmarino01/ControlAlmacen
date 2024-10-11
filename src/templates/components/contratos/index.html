@@ -3,9 +3,155 @@
 {% block title %} Contratos {% endblock title %}
 
 {% block content %}
+<h1 class="mt-4">Listado de Contratos</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="#">Mantenedor</a></li>
+    <li class="breadcrumb-item active">Contratos</li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Listado de Contrato
+        <span class="mx-2">|</span>
+        <a class="btn btn-sm btn-success" href="#" data-bs-toggle="modal" data-bs-target="#contratoModal"
+            onclick="openContratoModal(null)">
+            <i class="fa fa-plus"></i> CREAR NUEVO CONTRATO
+        </a>
+    </div>
+
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Renta Mensual</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Renta Mensual</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Acciones</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for item in contratos %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.cliente.nombre }}</td>
+                    <td>{{ item.renta }}</td>
+                    <td>{{ item.fecha_inicio }}</td>
+                    <td>{{ item.fecha_final }}</td>
+                    <td class="col-3">
+                        <a class="btn btn-sm btn-primary" title="Detalles del Contrato" data-bs-toggle="modal"
+                            data-bs-target="#contratoModal"
+                            onclick="openContratoModal({{ item.id }}, '{{ item.cliente.nombre }}', {{ item.renta }}, {{ item.fecha_inicio }}, {{ item.fecha_final }})">
+                            <i class="fa fa-tools"></i></a>
+                        <a class="btn btn-sm btn-danger" title="Eliminar contrato"
+                            onclick="return confirmDelete(event, {{ item.id }});">
+                            <i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'components/contratos/modal_form.html' %}
+</div>
+
 
 {% endblock content %}
 
 {% block customJS %}
+<script>
+    const modalContrato = document.getElementById('contratoModal');
+    const contratoModal = new bootstrap.Modal(modalContrato);
 
+    function openContratoModal(id = null, cliente = '', renta = '', top = '', leftPos = '', width = '', height = '', color = '') {
+        const modalTitle = document.getElementById('contratoModalLabel');
+        const contratoForm = document.getElementById('contratoForm');
+        const contratoId = document.getElementById('contratoId');
+        const contratoCliente = document.getElementById('cliente');
+        const contratoRenta = document.getElementById('renta');
+
+
+        if (id) {
+            modalTitle.innerText = 'Editar contrato';
+            contratoForm.action = '/editar_contrato/' + id;
+        } else {
+            modalTitle.innerText = 'Crear Nuevo Contrato';
+            contratoForm.action = '/crear_contrato';
+        }
+        contratoId.value = id || '';
+        contratoCliente.value = cliente || '';
+        contratoRenta.value = renta || '';
+
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#cliente').select2({
+            theme: 'bootstrap-5',
+            placeholder: "Selecciona un cliente...",
+            allowClear: true,
+            dropdownParent: $('#contratoModal'),
+            language: {
+                noResults: function () {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
+    });
+    $(document).ready(function () {
+        $('#almacen').select2({
+            theme: 'bootstrap-5',
+            placeholder: "Selecciona un almacen...",
+            allowClear: true,
+            dropdownParent: $('#contratoModal'),
+            language: {
+                noResults: function () {
+                    return "No se encontraron resultados";
+                }
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#almacen').on('change.select2', function () {
+            var almacenId = $(this).val();
+            console.log("Almacen seleccionado: " + almacenId);
+            // Realiza la petición AJAX para obtener las puertas del almacén
+            fetch(`/almacen/` + almacenId + `/puertas`)
+                .then(response => response.json())
+                .then(data => {
+                    var puertasContainer = document.getElementById('puertasContainer');
+                    puertasContainer.innerHTML = ''; // Limpia las puertas anteriores
+
+                    if (data.length === 0) {
+                        // Mostrar mensaje si no hay puertas
+                        puertasContainer.innerHTML = '<p>No puertas agregadas o disponibles</p>';
+                    } else {
+                        // Crear un checkbox para cada puerta si hay puertas disponibles
+                        data.forEach(function (puerta) {
+                            var checkbox = `<div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="puerta_${puerta.id}" name="puertas" value="${puerta.id}" checked>
+                            <label class="form-check-label" for="puerta_${puerta.id}">${puerta.nombre}</label>
+                        </div>`;
+                            puertasContainer.innerHTML += checkbox;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching puertas:', error));
+        });
+    });
+</script>
 {% endblock customJS%}

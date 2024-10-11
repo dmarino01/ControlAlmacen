@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from controllers.ControllerCliente import ControllerCliente
 from sqlalchemy import exc
 
-from db import db
 
 cliente_bp = Blueprint('cliente', __name__)
 
