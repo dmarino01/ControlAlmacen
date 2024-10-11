@@ -169,7 +169,6 @@
 </script>
 
 <script>
-
     let puertasEliminadas = [];
 
     function openPuertasModal(id = null, nombre = '') {
@@ -187,7 +186,7 @@
 
             // Asegurarse que mensajeSinPuertas existe antes de trabajar con él
             if (mensajeSinPuertas) {
-                mensajeSinPuertas.style.display = 'none';
+                mensajeSinPuertas.style.display = 'none'; // Ocultar mensaje al abrir el modal
             }
 
             // Realizar una llamada AJAX para obtener las puertas
@@ -219,19 +218,22 @@
                             listaPuertas.appendChild(nuevaPuerta);
                         });
                     } else {
-                        listaPuertas.innerHTML = '<li class="list-group-item">No hay puertas disponibles</li>';
+                        // Si no hay puertas, mostrar mensaje
+                        listaPuertas.innerHTML = ''; // Limpiar la lista de puertas
                         if (mensajeSinPuertas) {
                             mensajeSinPuertas.style.display = 'block'; // Mostrar mensaje
                         }
                     }
+                    // Actualizar el mensaje de acuerdo a la lista de puertas
+                    actualizarMensajePuertas();
                 })
                 .catch(error => console.error('Error al obtener las puertas:', error));
         }
     }
 
     function actualizarMensajePuertas() {
-        const listaPuertas = document.getElementById('listaPuertas');
-        const mensajeSinPuertas = document.getElementById('mensajeSinPuertas');
+        let listaPuertas = document.getElementById('listaPuertas');
+        let mensajeSinPuertas = document.getElementById('mensajeSinPuertas');
         // Si la lista está vacía, mostrar el mensaje
         if (listaPuertas.children.length === 0) {
             mensajeSinPuertas.style.display = 'block'; // Mostrar mensaje
@@ -267,23 +269,23 @@
 
                 eliminarBtn.onclick = function () {
                     const puertaId = nuevaPuerta.getAttribute('data-puerta-id');
-                    console.log(`Eliminando puerta con ID: ${puertaId}`);
                     if (puertaId) {
                         puertasEliminadas.push(puertaId);
-                        console.log(`Puertas eliminadas después de agregar: ${puertasEliminadas}`);
                     }
                     listaPuertas.removeChild(nuevaPuerta);
                     puertasAgregadas = puertasAgregadas.filter(p => p.nombre !== nombrePuerta);
 
                     actualizarMensajePuertas(); // Actualiza el mensaje al eliminar
                 };
-
                 nuevaPuerta.appendChild(eliminarBtn);
                 listaPuertas.appendChild(nuevaPuerta);
                 puertasAgregadas.push({ nombre: nombrePuerta });
                 nombrePuertaInput.value = '';
                 tituloPuertas.innerText = 'Puertas Agregadas:';
-                mensajeSinPuertas.style.display = 'none'; // Ocultar mensaje al agregar
+                const mensajeSinPuertas = document.getElementById('mensajeSinPuertas');
+                if (mensajeSinPuertas) {
+                    mensajeSinPuertas.style.display = 'none';  // Ocultar mensaje al agregar
+                }
             } else {
                 alert('Por favor, ingresa un nombre para la puerta.');
             }
