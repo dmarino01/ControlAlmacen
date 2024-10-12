@@ -13,8 +13,8 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="cliente" class="form-label">Cliente</label>
-                            <select class="form-control select2" id="cliente" name="cliente" required>
+                            <label for="contratoCliente" class="form-label">Cliente</label>
+                            <select class="form-control select2" id="contratoCliente" name="contratoCliente" required>
                                 <option value="" disabled selected>Selecciona un cliente...</option>
                                 {% for item in clientes %}
                                 <option value="{{ item.id }}">{{ item.nombre }}</option>
@@ -22,15 +22,15 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="renta" class="form-label">Renta Mensual (S/.)</label>
-                            <input type="text" class="form-control" id="renta" name="renta" required>
+                            <label for="contratoRenta" class="form-label">Renta Mensual (S/.)</label>
+                            <input type="text" class="form-control" id="contratoRenta" name="contratoRenta" required>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="almacen" class="form-label">Almacen</label>
-                            <select class="form-control select2" id="almacen" name="almacen">
+                            <label for="contratoAlmacen" class="form-label">Almacen</label>
+                            <select class="form-control select2" id="contratoAlmacen" name="contratoAlmacen">
                                 <option value="" disabled selected>Selecciona un almacen...</option>
                                 {% for item in almacenes %}
                                 <option value="{{ item.id }}">{{ item.nombre }}</option>
@@ -38,12 +38,12 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
-                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                            <label for="contratoFechaInicio" class="form-label">Fecha de Inicio</label>
+                            <input type="date" class="form-control" id="contratoFechaInicio" name="contratoFechaInicio" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="fecha_final" class="form-label">Fecha Final</label>
-                            <input type="date" class="form-control" id="fecha_final" name="fecha_final" required>
+                            <label for="contratoFechaFinal" class="form-label">Fecha Final</label>
+                            <input type="date" class="form-control" id="contratoFechaFinal" name="contratoFechaFinal" required>
                         </div>
                     </div>
 

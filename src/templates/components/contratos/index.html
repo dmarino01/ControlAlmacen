@@ -52,8 +52,7 @@
                     <td>{{ item.fecha_final }}</td>
                     <td class="col-3">
                         <a class="btn btn-sm btn-primary" title="Detalles del Contrato" data-bs-toggle="modal"
-                            data-bs-target="#contratoModal"
-                            onclick="openContratoModal({{ item.id }}, '{{ item.cliente.nombre }}', {{ item.renta }}, {{ item.fecha_inicio }}, {{ item.fecha_final }})">
+                            data-bs-target="#contratoModal" onclick="openContratoModal({{ item.id }}, {{ item.cliente_id }}, {{ item.renta }}, {% if item.contrato_puertas and item.contrato_puertas[0] is not none -%}{{ item.contrato_puertas[0].puerta.almacen_id }}{% endif -%}, '{{ item.fecha_inicio }}', '{{ item.fecha_final }}')">
                             <i class="fa fa-tools"></i></a>
                         <a class="btn btn-sm btn-danger" title="Eliminar contrato"
                             onclick="return confirmDelete(event, {{ item.id }});">
@@ -75,13 +74,15 @@
     const modalContrato = document.getElementById('contratoModal');
     const contratoModal = new bootstrap.Modal(modalContrato);
 
-    function openContratoModal(id = null, cliente = '', renta = '', top = '', leftPos = '', width = '', height = '', color = '') {
+    function openContratoModal(id = null, cliente_id = '', renta = '', almacen_id = '', fecha_inicio = '', fecha_final = '') {
         const modalTitle = document.getElementById('contratoModalLabel');
         const contratoForm = document.getElementById('contratoForm');
         const contratoId = document.getElementById('contratoId');
-        const contratoCliente = document.getElementById('cliente');
-        const contratoRenta = document.getElementById('renta');
-
+        const contratoCliente = document.getElementById('contratoCliente');
+        const contratoRenta = document.getElementById('contratoRenta');
+        const contratoAlmacen = document.getElementById('contratoAlmacen');
+        const contratoFechaInicio = document.getElementById('contratoFechaInicio');
+        const contratoFechaFinal = document.getElementById('contratoFechaFinal');
 
         if (id) {
             modalTitle.innerText = 'Editar contrato';
@@ -90,15 +91,19 @@
             modalTitle.innerText = 'Crear Nuevo Contrato';
             contratoForm.action = '/crear_contrato';
         }
+        
         contratoId.value = id || '';
-        contratoCliente.value = cliente || '';
-        contratoRenta.value = renta || '';
+        contratoCliente.value = cliente_id || '';
+        contratoRenta.value = renta || 0;
+        contratoAlmacen.value = almacen_id || '';
+        contratoFechaInicio.value = fecha_inicio || '';
+        contratoFechaFinal.value = fecha_final || '';
 
     }
 </script>
 <script>
     $(document).ready(function () {
-        $('#cliente').select2({
+        $('#contratoCliente').select2({
             theme: 'bootstrap-5',
             placeholder: "Selecciona un cliente...",
             allowClear: true,
@@ -111,7 +116,7 @@
         });
     });
     $(document).ready(function () {
-        $('#almacen').select2({
+        $('#contratoAlmacen').select2({
             theme: 'bootstrap-5',
             placeholder: "Selecciona un almacen...",
             allowClear: true,
@@ -126,7 +131,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        $('#almacen').on('change.select2', function () {
+        $('#contratoAlmacen').on('change.select2', function () {
             var almacenId = $(this).val();
             // Realiza la petición AJAX para obtener las puertas del almacén
             fetch(`/almacen/` + almacenId + `/puertas`)
