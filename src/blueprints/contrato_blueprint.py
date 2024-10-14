@@ -24,3 +24,13 @@ def get_puertas_by_almacen(id):
     except Exception as e:
         print(f"Error fetching puertas: {e}")
         return jsonify([]), 500
+    
+
+@contrato_bp.route('/eliminar_contrato/<int:id>', methods=['GET', 'POST'])
+def eliminar_contrato(id):
+    if request.method == 'POST':
+        try:
+            ControllerContrato.deleteContrato(id)        
+        except Exception as e:
+            flash(f'Error al eliminar el contrato: {str(e)}', 'error')
+        return redirect(url_for('contrato.contratos'))

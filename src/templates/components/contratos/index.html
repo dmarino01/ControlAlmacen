@@ -65,8 +65,6 @@
     </div>
     {% include 'components/contratos/modal_form.html' %}
 </div>
-
-
 {% endblock content %}
 
 {% block customJS %}
@@ -157,5 +155,41 @@
                 .catch(error => console.error('Error fetching puertas:', error));
         });
     });
+</script>
+<script>
+    function confirmDelete(event, contratoId) {
+        event.preventDefault(); // Evita el comportamiento predeterminado del enlace
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás recuperar este registro!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminarlo!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("Contrato ID:", contratoId); // Asegúrate de que se imprima el ID correcto
+                // Enviar solicitud POST
+                fetch('/eliminar_contrato/' + contratoId, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}' // Incluye CSRF token si lo necesitas
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '/contratos'; // Redirige a la lista de contratos
+                    } else {
+                        Swal.fire('Error', 'No se pudo eliminar el contrato.', 'error');
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    Swal.fire('Error', 'Hubo un problema al eliminar el contrato.', 'error');
+                });
+            }
+        });
+    }
 </script>
 {% endblock customJS%}

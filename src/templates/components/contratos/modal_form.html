@@ -16,7 +16,7 @@
                             <label for="contratoCliente" class="form-label">Cliente</label>
                             <select class="form-control select2" id="contratoCliente" name="contratoCliente" required>
                                 <option value="" disabled selected>Selecciona un cliente...</option>
-                                {% for item in clientes %}
+                                {% for item in clientes|sort(attribute='nombre') %}
                                 <option value="{{ item.id }}">{{ item.nombre }}</option>
                                 {% endfor %}
                             </select>
