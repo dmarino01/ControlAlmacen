@@ -2,6 +2,8 @@ from flask import Flask, redirect, render_template, abort, flash, request, url_f
 from config import Config, csrf
 from db import db
 
+import base64
+
 from controllers.ControllerAlmacen import ControllerAlmacen
 
 from blueprints.almacen_blueprint import almacen_bp
@@ -47,6 +49,12 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return {"error": "Internal server error"}, 500
+
+@app.template_filter('b64encode')
+def b64encode_filter(data):
+    if data is None:
+        return None
+    return base64.b64encode(data).decode('utf-8')
 
 if __name__ == '__main__':
     csrf.init_app(app)

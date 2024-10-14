@@ -15,8 +15,8 @@ class ControllerCliente:
             return []
         
     @classmethod
-    def createCliente(cls, nombre, contacto):
-        nuevo_cliente = Cliente(nombre=nombre, contacto=contacto)
+    def createCliente(cls, nombre, contacto, logo):
+        nuevo_cliente = Cliente(nombre=nombre, contacto=contacto, logo=logo)
         try:
             db.session.add(nuevo_cliente)
             db.session.commit()
@@ -31,13 +31,15 @@ class ControllerCliente:
             raise e
         
     @classmethod
-    def updateCliente(cls, nombre, contacto, id):
+    def updateCliente(cls, id, nombre, contacto, logo):
         try:
             cliente = Cliente.query.get(id)
             if not cliente:
                 raise ValueError("Cliente no encontrado.")
             cliente.nombre = nombre
             cliente.contacto = contacto
+            if logo:
+                cliente.logo = logo
             db.session.commit()
             flash('¡Cliente actualizado correctamente!', 'success')
             return cliente

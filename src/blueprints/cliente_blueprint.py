@@ -17,8 +17,15 @@ def crear_cliente():
     if request.method == 'POST':
         nombre = request.form['nombre']
         contacto = request.form['contacto']
+        logo_file = request.files['logo']
+        
+        if logo_file:
+            logo = logo_file.read()
+        else:
+            logo = None
+
         try:
-            ControllerCliente.createCliente(nombre, contacto)
+            ControllerCliente.createCliente(nombre, contacto, logo)
         except ValueError as e:
             flash(str(e), 'error')
         except exc.IntegrityError:
@@ -31,8 +38,15 @@ def editar_cliente(id):
     if request.method == 'POST':
         nombre = request.form['nombre']
         contacto = request.form['contacto']
+        logo_file = request.files['logo']
+        
+        if logo_file:
+            logo = logo_file.read()
+        else:
+            logo = None
+
         try:
-            ControllerCliente.updateCliente(nombre, contacto, id)   
+            ControllerCliente.updateCliente(id, nombre, contacto, logo)   
         except Exception as e:
             flash(f'Error al actualizar el cliente: {str(e)}', 'error')
         return redirect(url_for('cliente.clientes'))

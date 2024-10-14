@@ -42,7 +42,12 @@
                 {% for item in clientes %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.nombre }}</td>
+                    <td>
+                        {% if item.logo %}
+                        <img src="data:image/png;base64,{{ item.logo | b64encode }}" alt="Logo" class="client-logo">
+                        {% endif %}
+                        {{ item.nombre }}
+                    </td>
                     <td>{{ item.contacto }}</td>
                     <td class="col-2">
                         <a class="btn btn-sm btn-warning" title="Editar" data-bs-toggle="modal"

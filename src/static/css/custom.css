@@ -38,58 +38,21 @@
     text-align: center;
 }
 
-.cell.G1 {
-    width: 72px;
-    height: 48px;
-    top: 98px; 
-    left: 218px;
-    background-color: rgba(0, 255, 0, 0.8);
+.client-info {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el logo y el texto */
 }
 
-.cell.G2 {
-    width: 61px;
-    height: 118px;
-    top: 9px;
-    left: 493px;
-    background-color: rgba(255, 0, 0, 0.8);
+.client-logo {
+    width: 25px; /* Ajusta el ancho del logo */
+    height: auto; /* Mantiene la proporción del logo */
+    margin-right: 8px; /* Espacio entre el logo y el nombre */
 }
 
-.cell.G3 {
-    width: 70px;
-    height: 48px;
-    top: 148px;
-    left: 296px;
-    background-color: rgba(0, 0, 255, 0.8);
+.no-logo {
+    margin-right: 8px; /* Espacio entre el texto y el nombre */
 }
 
-.cell.G4 {
-    width: 70px;
-    height: 48px;
-    top: 148px;
-    left: 368px;
-    background-color: rgba(0, 0, 255, 0.8);
-}
-
-.cell.G5 {
-    width: 50px;
-    height: 60px;
-    top: 230px;
-    left: 158px;
-    background-color: rgba(0, 0, 255, 0.8);
-}
-
-.cell.G6 {
-    width: 86px;
-    height: 60px;
-    top: 230px;
-    left: 211px;
-    background-color: rgba(0, 0, 255, 0.8);
-}
-
-.cell.G7 {
-    width: 43px;
-    height: 84px;
-    top: 230px;
-    left: 299px;
-    background-color: blue;
+.client-name {
+    font-weight: bold; /* Estilo para el nombre del cliente */
 }
