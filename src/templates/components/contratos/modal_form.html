@@ -30,7 +30,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="contratoAlmacen" class="form-label">Almacen</label>
-                            <select class="form-control select2" id="contratoAlmacen" name="contratoAlmacen">
+                            <select class="form-control select2" id="contratoAlmacen" name="contratoAlmacen" required>
                                 <option value="" disabled selected>Selecciona un almacen...</option>
                                 {% for item in almacenes %}
                                 <option value="{{ item.id }}">{{ item.nombre }}</option>

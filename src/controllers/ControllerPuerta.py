@@ -44,28 +44,36 @@ class ControllerPuerta:
 
     @classmethod
     def savePuertas(cls, almacen_id, puertas_agregadas):
-        # Obtener el almacén
         almacen = Almacen.query.get(almacen_id)
         if not almacen:
             return jsonify({'error': 'Almacén no encontrado'}), 404
 
-        # Actualizar puertas del almacén
         puertas_actuales = {
             puerta.nombre: puerta for puerta in almacen.puertas}
 
-        # Remover puertas que ya no están en la lista
         for puerta in list(puertas_actuales):
             if puerta not in [p['nombre'] for p in puertas_agregadas]:
                 puerta_eliminar = puertas_actuales[puerta]
                 db.session.delete(puerta_eliminar)
 
-        # Agregar nuevas puertas
         for puerta_data in puertas_agregadas:
             if puerta_data['nombre'] not in puertas_actuales:
-                # Ajustar estado_id si es necesario
                 nueva_puerta = Puerta(
                     nombre=puerta_data['nombre'], estado_id=1, almacen_id=almacen_id)
                 db.session.add(nueva_puerta)
 
         db.session.commit()
         return jsonify({'message': 'Puertas guardadas con éxito'}), 200
+    
+
+    @classmethod
+    def updatePuertaEstado(cls, puerta_id):
+        try:
+            puerta = Puerta.query.get(puerta_id)
+            if puerta:
+                puerta.estado_id = 2 
+                db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"General error: {e}")
+            raise e

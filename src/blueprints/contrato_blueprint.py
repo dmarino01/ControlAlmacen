@@ -3,6 +3,7 @@ from controllers.ControllerContrato import ControllerContrato
 from controllers.ControllerCliente import ControllerCliente
 from controllers.ControllerAlmacen import ControllerAlmacen
 from controllers.ControllerPuerta import ControllerPuerta
+from controllers.ControllerContratoPuertas import ControllerContratoPuertas
 
 
 contrato_bp = Blueprint('contrato', __name__)
@@ -24,6 +25,27 @@ def get_puertas_by_almacen(id):
     except Exception as e:
         print(f"Error fetching puertas: {e}")
         return jsonify([]), 500
+
+
+@contrato_bp.route('/crear_contrato', methods=['GET', 'POST'])
+def crear_contrato():
+    if request.method == 'POST':
+        cliente_id = request.form['contratoCliente']
+        renta = request.form['contratoRenta']
+        fecha_inicio = request.form['contratoFechaInicio']
+        fecha_final = request.form['contratoFechaFinal']
+        puertas_ids = request.form.getlist('puertas') 
+        try:
+            contrato_id = ControllerContrato.createContrato(cliente_id, renta, fecha_inicio, fecha_final)
+            for puerta_id in puertas_ids:
+                ControllerContratoPuertas.createContratoPuertas(contrato_id, puerta_id)
+                ControllerPuerta.updatePuertaEstado(puerta_id)
+            flash('Contrato creado exitosamente!', 'success')
+        except ValueError as e:
+            flash(str(e), 'error')
+        except Exception as e:
+            flash(f'Error creando contrato: {str(e)}')
+        return redirect(url_for('contrato.contratos'))
     
 
 @contrato_bp.route('/eliminar_contrato/<int:id>', methods=['GET', 'POST'])

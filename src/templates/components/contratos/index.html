@@ -52,7 +52,8 @@
                     <td>{{ item.fecha_final }}</td>
                     <td class="col-3">
                         <a class="btn btn-sm btn-primary" title="Detalles del Contrato" data-bs-toggle="modal"
-                            data-bs-target="#contratoModal" onclick="openContratoModal({{ item.id }}, {{ item.cliente_id }}, {{ item.renta }}, {% if item.contrato_puertas and item.contrato_puertas[0] is not none -%}{{ item.contrato_puertas[0].puerta.almacen_id }}{% endif -%}, '{{ item.fecha_inicio }}', '{{ item.fecha_final }}')">
+                            data-bs-target="#contratoModal"
+                            onclick="openContratoModal({{ item.id }}, {{ item.cliente_id }}, {{ item.renta }}, {% if item.contrato_puertas and item.contrato_puertas[0] is not none -%}{{ item.contrato_puertas[0].puerta.almacen_id }}{% endif -%}, '{{ item.fecha_inicio }}', '{{ item.fecha_final }}')">
                             <i class="fa fa-tools"></i></a>
                         <a class="btn btn-sm btn-danger" title="Eliminar contrato"
                             onclick="return confirmDelete(event, {{ item.id }});">
@@ -89,7 +90,7 @@
             modalTitle.innerText = 'Crear Nuevo Contrato';
             contratoForm.action = '/crear_contrato';
         }
-        
+
         contratoId.value = id || '';
         contratoCliente.value = cliente_id || '';
         contratoRenta.value = renta || 0;
@@ -153,6 +154,23 @@
                     }
                 })
                 .catch(error => console.error('Error fetching puertas:', error));
+        });
+
+        $('#contratoForm').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var formData = form.serializeArray();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                success: function (response) {
+                    window.location.href = "/contratos";
+                },
+                error: function (xhr) {
+                    console.log('Error:', xhr.responseText);
+                }
+            });
         });
     });
 </script>

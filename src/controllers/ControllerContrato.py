@@ -15,6 +15,19 @@ class ControllerContrato:
             return []
         
     @classmethod
+    def createContrato(cls, cliente_id, renta, fecha_inicio, fecha_final):
+        nuevo_contrato = Contrato(cliente_id=cliente_id, renta=renta, fecha_inicio=fecha_inicio, fecha_final=fecha_final)
+        try:
+            db.session.add(nuevo_contrato)
+            db.session.commit()
+            flash('Contrato creado exitosamente!', 'success')
+            return nuevo_contrato.id
+        except Exception as e:
+            db.session.rollback()
+            print(f"General error: {e}")
+            raise e
+        
+    @classmethod
     def deleteContrato(cls, id):
         try:
             contrato = Contrato.query.get(id)
