@@ -3,6 +3,7 @@ from db import db
 from sqlalchemy import exc
 from flask import flash
 
+
 class ControllerCliente:
 
     @classmethod
@@ -13,7 +14,7 @@ class ControllerCliente:
         except Exception as e:
             print(f"Error fetching clientes: {e}")
             return []
-        
+
     @classmethod
     def createCliente(cls, nombre, contacto, logo):
         nuevo_cliente = Cliente(nombre=nombre, contacto=contacto, logo=logo)
@@ -29,7 +30,7 @@ class ControllerCliente:
             db.session.rollback()
             print(f"General error: {e}")
             raise e
-        
+
     @classmethod
     def updateCliente(cls, id, nombre, contacto, logo):
         try:
@@ -50,7 +51,7 @@ class ControllerCliente:
             db.session.rollback()
             print(f"Error al actualizar el cliente: {e}")
             raise e
-        
+
     @classmethod
     def deleteCliente(cls, id):
         try:
@@ -65,4 +66,18 @@ class ControllerCliente:
             db.session.rollback()
             print(f"Error al eliminar el cliente: {e}")
             raise e
-            
+
+    @classmethod
+    def removeLogo(cls, id):
+        try:
+            cliente = Cliente.query.get(id)
+            if not cliente:
+                raise ValueError("Cliente no encontrado.")
+            cliente.logo = None
+            db.session.commit()
+            flash('Logo eliminado correctamente!', 'success')
+            return cliente
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error al eliminar el logo: {e}")
+            raise e

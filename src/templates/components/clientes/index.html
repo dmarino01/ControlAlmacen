@@ -52,7 +52,7 @@
                     <td class="col-2">
                         <a class="btn btn-sm btn-warning" title="Editar" data-bs-toggle="modal"
                             data-bs-target="#clienteModal"
-                            onclick="openClienteModal({{ item.id }}, '{{ item.nombre }}', '{{ item.contacto }}')">
+                            onclick="openClienteModal({{ item.id }}, '{{ item.nombre }}', '{{ item.contacto }}', '{{ item.logo is not none | tojson }}')">
                             <i class="fa fa-pen"></i></a>
                         <a class="btn btn-sm btn-danger" title="Eliminar"
                             onclick="return confirmDelete(event, {{ item.id }});">

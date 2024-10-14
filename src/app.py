@@ -33,6 +33,10 @@ def index():
 def plantilla():
     return render_template('layout_old.html')
 
+@app.route('/charts_index')
+def charts_index():
+    return render_template('charts_index.html')
+
 @app.route('/error')
 def trigger_error():
     abort(404)

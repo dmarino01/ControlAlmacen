@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from controllers.ControllerCliente import ControllerCliente
 from sqlalchemy import exc
 
+import base64
 
 cliente_bp = Blueprint('cliente', __name__)
 
@@ -60,3 +61,14 @@ def eliminar_cliente(id):
         except Exception as e:
             flash(f'Error al eliminar el cliente: {str(e)}', 'error')
         return redirect(url_for('cliente.clientes'))
+
+
+@cliente_bp.route('/remover_logo/<int:id>', methods=['GET', 'POST'])
+def remover_logo(id):
+    if request.method == 'GET':
+        try:
+            ControllerCliente.removeLogo(id)
+            print('hi')
+        except Exception as e:
+            flash(f'Error al eliminar el logo: {str(e)}', 'error')
+    return redirect(url_for('cliente.clientes'))

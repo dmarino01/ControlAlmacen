@@ -5,7 +5,7 @@
                 <h5 class="modal-title" id="clienteModalLabel">Crear Nuevo Cliente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <div class="modal-body">
                 <form id="clienteForm" method="POST" action="#" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -17,34 +17,60 @@
                     <div class="mb-3">
                         <label for="clienteContacto" class="form-label">Contacto</label>
                         <input type="text" class="form-control" id="clienteContacto" name="contacto">
+                    </div> 
+                    <label for="" class="form-label">Logo</label>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <input type="file" class="form-control" name="logo" accept="image/*">
+                        </div>
+                        <div class="col-md-4">
+                            <a href="#" id="quitarLogoBtn" class="btn btn-danger" style="display: none;">
+                                Quitar Logo
+                            </a>
+                        </div>
                     </div>
-                    <input type="file" name="logo" accept="image/*">
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-xmark"></i> Cancelar</button>
-                <button type="submit" class="btn btn-primary" form="clienteForm"><i class="fas fa-floppy-disk"></i> Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-xmark"></i>
+                    Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="clienteForm"><i class="fas fa-floppy-disk"></i>
+                    Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    function openClienteModal(id = null, nombre = '', contacto = '') {
+    function openClienteModal(id = null, nombre = '', contacto = '', logoExists = false) {
         const modalTitle = document.getElementById('clienteModalLabel');
         const clienteForm = document.getElementById('clienteForm');
         const clienteId = document.getElementById('clienteId');
         const clienteNombre = document.getElementById('clienteNombre');
         const clienteContacto = document.getElementById('clienteContacto');
-
+        const quitarLogoBtn = document.getElementById('quitarLogoBtn');
+        
+        logoExists = logoExists === 'true';
+        
         if (id) {
             modalTitle.innerText = 'Editar Cliente';
             clienteForm.action = '/editar_cliente/' + id;
+
+            // Verifica si existe el logo
+            if (logoExists) {  // Cambiado a verificar la variable logoExists
+                quitarLogoBtn.href = '/remover_logo/' + id;
+                quitarLogoBtn.style.display = 'inline-block';  // Muestra el botón
+            } else {
+                quitarLogoBtn.style.display = 'none';  // Oculta el botón
+            }
         } else {
             modalTitle.innerText = 'Crear Nuevo Cliente';
             clienteForm.action = '/crear_cliente';
+            quitarLogoBtn.href = '#';
+            quitarLogoBtn.style.display = 'none';  // Oculta el botón
         }
+
 
         clienteId.value = id || '';
         clienteNombre.value = nombre || '';
