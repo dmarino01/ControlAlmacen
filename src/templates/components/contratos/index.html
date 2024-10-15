@@ -77,26 +77,29 @@
         const modalTitle = document.getElementById('contratoModalLabel');
         const contratoForm = document.getElementById('contratoForm');
         const contratoId = document.getElementById('contratoId');
-        const contratoCliente = document.getElementById('contratoCliente');
+        const contratoCliente = $('#contratoCliente');
         const contratoRenta = document.getElementById('contratoRenta');
-        const contratoAlmacen = document.getElementById('contratoAlmacen');
+        const contratoAlmacen = $('#contratoAlmacen');
         const contratoFechaInicio = document.getElementById('contratoFechaInicio');
         const contratoFechaFinal = document.getElementById('contratoFechaFinal');
 
         if (id) {
             modalTitle.innerText = 'Editar contrato';
             contratoForm.action = '/editar_contrato/' + id;
+            contratoCliente.prop('disabled', true);
+            contratoAlmacen.prop('disabled', true);
         } else {
             modalTitle.innerText = 'Crear Nuevo Contrato';
             contratoForm.action = '/crear_contrato';
         }
 
         contratoId.value = id || '';
-        contratoCliente.value = cliente_id || '';
         contratoRenta.value = renta || 0;
-        contratoAlmacen.value = almacen_id || '';
         contratoFechaInicio.value = fecha_inicio || '';
         contratoFechaFinal.value = fecha_final || '';
+
+        contratoCliente.val(cliente_id).trigger('change');
+        contratoAlmacen.val(almacen_id).trigger('change');
 
     }
 </script>
