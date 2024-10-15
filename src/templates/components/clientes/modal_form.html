@@ -56,21 +56,18 @@
         if (id) {
             modalTitle.innerText = 'Editar Cliente';
             clienteForm.action = '/editar_cliente/' + id;
-
-            // Verifica si existe el logo
-            if (logoExists) {  // Cambiado a verificar la variable logoExists
+            if (logoExists) {
                 quitarLogoBtn.href = '/remover_logo/' + id;
-                quitarLogoBtn.style.display = 'inline-block';  // Muestra el botón
+                quitarLogoBtn.style.display = 'inline-block';
             } else {
-                quitarLogoBtn.style.display = 'none';  // Oculta el botón
+                quitarLogoBtn.style.display = 'none';
             }
         } else {
             modalTitle.innerText = 'Crear Nuevo Cliente';
             clienteForm.action = '/crear_cliente';
             quitarLogoBtn.href = '#';
-            quitarLogoBtn.style.display = 'none';  // Oculta el botón
+            quitarLogoBtn.style.display = 'none';
         }
-
 
         clienteId.value = id || '';
         clienteNombre.value = nombre || '';

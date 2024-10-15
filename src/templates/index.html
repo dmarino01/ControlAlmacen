@@ -15,35 +15,45 @@
     </div>
     <div>
         {% for item in almacenes %}
-        {% for css in item.almacenCSSDetalles %}
-        <div class="cell"
-            style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px; background-color: {{ css.color }};"
-            onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
-            {{ item.nombre }}
-        </div>
-        <div class="info-box" id="info-box-{{ item.id }}"
-            style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
-            Puertas - Almacén '{{ item.nombre }}'
-            <div class="info-content">
-                {% for puerta in item.puertas %}
-                <div class="info-item">
-                    {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
-                    {% if puerta.contrato_puertas %}
-                    {% for contrato_puerta in puerta.contrato_puertas %}
-                    {% if contrato_puerta.contrato.cliente %}
-                    - {{ contrato_puerta.contrato.cliente.nombre }}
-                    {% else %}
-                    - SIN CLIENTE
-                    {% endif %}
-                    {% endfor %}
-                    {% else %}
-                    - SIN CLIENTE
-                    {% endif %}
-                </div>
-                {% endfor %}
+            {% for css in item.almacenCSSDetalles %}
+            <div class="cell"
+                 style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px;
+                        background-color: 
+                        {% if item.estado_alquiler == 'Todo por Alquilar' %}
+                            red;
+                        {% elif item.estado_alquiler == 'Alquiler Parcial' %}
+                            orange;
+                        {% elif item.estado_alquiler == 'Alquiler Total' %}
+                            green;
+                        {% else %}
+                            grey;
+                        {% endif %};"
+                 onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
+                {{ item.nombre }}
             </div>
-        </div>
-        {% endfor %}
+            <div class="info-box" id="info-box-{{ item.id }}"
+                style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
+                Puertas - Almacén '{{ item.nombre }}'
+                <div class="info-content">
+                    {% for puerta in item.puertas %}
+                    <div class="info-item">
+                        {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
+                        {% if puerta.contrato_puertas %}
+                        {% for contrato_puerta in puerta.contrato_puertas %}
+                        {% if contrato_puerta.contrato.cliente %}
+                        - {{ contrato_puerta.contrato.cliente.nombre }}
+                        {% else %}
+                        - SIN CLIENTE
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        - SIN CLIENTE
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
         {% endfor %}
     </div>
 </div>

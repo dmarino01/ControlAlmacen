@@ -41,7 +41,7 @@
                 </tr>
             </tfoot>
             <tbody>
-                {% for item in almacenes %}
+                {% for item in almacenes|sort(attribute='id') %}
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.nombre }}</td>

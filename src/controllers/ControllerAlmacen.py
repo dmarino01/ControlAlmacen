@@ -15,7 +15,11 @@ class ControllerAlmacen:
                 .joinedload(Puerta.contrato_puertas)
                 .joinedload(ContratoPuertas.contrato)
                 .joinedload(Contrato.cliente)
-            ).all()
+            ).filter(Almacen.is_deleted == False).all()
+
+            for almacen in almacenes:
+                almacen.estado_alquiler = cls.getEstadoAlmacen(almacen.id)
+
             return almacenes
         except Exception as e:
             print(f"Error fetching almacenes: {e}")
@@ -70,3 +74,25 @@ class ControllerAlmacen:
             db.session.rollback()
             print(f"Error al eliminar el almacen: {e}")
             raise e
+        
+    @classmethod
+    def getEstadoAlmacen(cls, id):
+        connection = db.engine.raw_connection()
+        cursor = connection.cursor()
+
+        try:
+            cursor.execute("EXEC sp_DeterminarEstadoAlmacen ?", id)
+            result = cursor.fetchone()
+
+            cursor.close()
+            connection.close()
+
+            if result:
+                return result[0]
+            else:
+                return 'Estado Desconocido'
+        except Exception as e:
+            print(f"Error fetching estado for almacen {id}: {e}")
+            cursor.close()
+            connection.close()
+            return 'Estado Desconocido'
