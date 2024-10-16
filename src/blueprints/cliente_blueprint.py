@@ -68,7 +68,6 @@ def remover_logo(id):
     if request.method == 'GET':
         try:
             ControllerCliente.removeLogo(id)
-            print('hi')
         except Exception as e:
             flash(f'Error al eliminar el logo: {str(e)}', 'error')
     return redirect(url_for('cliente.clientes'))

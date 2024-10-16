@@ -12,7 +12,6 @@ puerta_bp = Blueprint('puerta', __name__)
 def obtener_puertas(id):
     puertas = ControllerPuerta.getPuertasPorAlmacen(id, None)
     puertas_data = [puerta.to_dict() for puerta in puertas]
-    print(puertas_data)
     return jsonify(puertas_data)
 
 

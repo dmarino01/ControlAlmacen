@@ -15,9 +15,8 @@
     </div>
     <div>
         {% for item in almacenes %}
-            {% for css in item.almacenCSSDetalles %}
-            <div class="cell"
-                 style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px;
+        {% for css in item.almacenCSSDetalles %}
+        <div class="cell" style="top: {{ css.top }}px; left: {{ css.left_pos }}px; width: {{ css.width }}px; height: {{ css.height }}px;
                         background-color: 
                         {% if item.estado_alquiler == 'Todo por Alquilar' %}
                             red;
@@ -27,36 +26,38 @@
                             green;
                         {% else %}
                             grey;
-                        {% endif %};"
-                 onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});">
-                {{ item.nombre }}
-            </div>
-            <div class="info-box" id="info-box-{{ item.id }}"
-                style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
-                Puertas - Almacén '{{ item.nombre }}'
-                <div class="info-content">
-                    {% for puerta in item.puertas %}
-                    <div class="info-item">
-                        {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
-                        {% if puerta.contrato_puertas %}
-                        {% for contrato_puerta in puerta.contrato_puertas %}
-                        {% if contrato_puerta.contrato.cliente %}
-                        - {{ contrato_puerta.contrato.cliente.nombre }}
-                        {% else %}
-                        - SIN CLIENTE
-                        {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        - SIN CLIENTE
-                        {% endif %}
-                    </div>
+                        {% endif %};" onmouseover="showInfo({{ item.id }});" onmouseout="hideInfo({{ item.id }});"
+            onclick="openModal({{ item.id }}, '{{ item.nombre }}');">
+            {{ item.nombre }}
+        </div>
+        <div class="info-box" id="info-box-{{ item.id }}"
+            style="display: none; position: absolute; top: {{ css.top + css.height + 10 }}px; left: {{ css.left_pos }}px;">
+            Puertas - Almacén '{{ item.nombre }}'
+            <div class="info-content">
+                {% for puerta in item.puertas %}
+                <div class="info-item">
+                    {{ puerta.nombre }} - {{ puerta.estado.descripcion }}
+                    {% if puerta.contrato_puertas %}
+                    {% for contrato_puerta in puerta.contrato_puertas %}
+                    {% if contrato_puerta.contrato.cliente %}
+                    - {{ contrato_puerta.contrato.cliente.nombre }}
+                    {% else %}
+                    - SIN CLIENTE
+                    {% endif %}
                     {% endfor %}
+                    {% else %}
+                    - SIN CLIENTE
+                    {% endif %}
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
         {% endfor %}
     </div>
 </div>
+
+{% include '/modal_almacen.html' %}
 
 {% endblock content %}
 
@@ -67,6 +68,14 @@
     }
     function hideInfo(id) {
         document.getElementById('info-box-' + id).style.display = 'none';
+    }
+
+    function openModal(id, nombre) {
+        // Insertar el contenido dinámico en el modal
+        document.getElementById('modalContent').innerHTML = `Detalles del almacén: ${nombre}`;
+
+        // Mostrar el modal
+        $('#almacenModal').modal('show');
     }
 </script>
 {% endblock customJS %}
