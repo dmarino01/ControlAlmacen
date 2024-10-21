@@ -29,6 +29,10 @@ def index():
     almacenes = ControllerAlmacen.getAlmacenes()
     return render_template('index.html', almacenes=almacenes)
 
+@app.route('/mantenedores')
+def mantenedores():
+    return render_template('mantenedores.html')
+
 @app.route('/plantilla')
 def plantilla():
     return render_template('layout_old.html')

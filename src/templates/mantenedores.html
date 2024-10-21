@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %} Mantenedores {% endblock title %}
+
+{% block content %}
+<h1 class="mt-4">Mantenedores</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active"><a href="{{ url_for('mantenedores') }}">Mantenedor</a></li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Listado de Mantenedores
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Almacenes</h5>
+                        <p class="card-text">Presione el botón para ir a la lista de almacenes.</p>
+                        <a href="{{ url_for('almacen.almacenes') }}" class="btn btn-primary"><i class="fas fa-table"></i> Ir a Mantenedor</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Clientes</h5>
+                        <p class="card-text">Presione el botón para ir a la lista de clientes.</p>
+                        <a href="{{ url_for('cliente.clientes') }}" class="btn btn-primary"><i class="fas fa-table"></i> Ir a Mantenedor</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Contratos</h5>
+                        <p class="card-text">Presione el botón para ir a la lista de contratos.</p>
+                        <a href="{{ url_for('contrato.contratos') }}" class="btn btn-primary"><i class="fas fa-table"></i> Ir a Mantenedor</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
