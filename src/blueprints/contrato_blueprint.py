@@ -45,7 +45,25 @@ def crear_contrato():
             flash(str(e), 'error')
         except Exception as e:
             flash(f'Error creando contrato: {str(e)}')
-        return redirect(url_for('contrato.contratos'))
+    return redirect(url_for('contrato.contratos'))
+    
+
+@contrato_bp.route('/editar_contrato/<int:id>', methods=['GET', 'POST'])
+def editar_contrato(id):
+    if request.method == 'POST':
+        cliente_id = request.form['contratoCliente']
+        renta = request.form['contratoRenta']
+        fecha_inicio = request.form['contratoFechaInicio']
+        fecha_final = request.form['contratoFechaFinal']
+        try:
+            contrato_id = ControllerContrato.updateContrato(id, cliente_id, renta, fecha_inicio, fecha_final)
+            flash('Contrato creado exitosamente!', 'success')
+        except ValueError as e:
+            flash(str(e), 'error')
+        except Exception as e:
+            flash(f'Error creando contrato: {str(e)}')            
+    return redirect(url_for('contrato.contratos'))
+
     
 
 @contrato_bp.route('/eliminar_contrato/<int:id>', methods=['GET', 'POST'])
@@ -55,4 +73,4 @@ def eliminar_contrato(id):
             ControllerContrato.deleteContrato(id)        
         except Exception as e:
             flash(f'Error al eliminar el contrato: {str(e)}', 'error')
-        return redirect(url_for('contrato.contratos'))
+    return redirect(url_for('contrato.contratos'))

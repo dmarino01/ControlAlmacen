@@ -86,7 +86,7 @@
         if (id) {
             modalTitle.innerText = 'Editar contrato';
             contratoForm.action = '/editar_contrato/' + id;
-            contratoCliente.prop('disabled', true);
+            contratoCliente.prop('disabled', false);
             contratoAlmacen.prop('disabled', true);
         } else {
             modalTitle.innerText = 'Crear Nuevo Contrato';

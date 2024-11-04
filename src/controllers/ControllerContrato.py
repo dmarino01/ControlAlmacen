@@ -28,6 +28,27 @@ class ControllerContrato:
             raise e
         
     @classmethod
+    def updateContrato(cls, id, cliente_id, renta, fecha_inicio, fecha_final):
+        try:
+            contrato = Contrato.query.get(id)
+            if not contrato:
+                raise ValueError("Contrato no encontrado.")
+            contrato.cliente_id = cliente_id
+            contrato.renta = renta
+            contrato.fecha_inicio = fecha_inicio
+            contrato.fecha_final = fecha_final
+            db.session.commit()
+            flash('¡Contrato actualizado correctamente!', 'success')
+            return contrato.id
+        except exc.IntegrityError:
+            db.session.rollback()
+            flash('Error de integridad: el contrato ya existe.', 'error')
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error al actualizar el contrato: {e}")
+            raise e
+        
+    @classmethod
     def deleteContrato(cls, id):
         try:
             contrato = Contrato.query.get(id)
