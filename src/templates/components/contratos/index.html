@@ -46,7 +46,10 @@
                 {% for item in contratos %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.cliente.nombre }}</td>
+                    <td>{% if item.cliente.logo %}
+                        <img src="data:image/png;base64,{{ item.cliente.logo | b64encode }}" alt="Logo" class="client-logo">
+                        {% endif %}
+                        {{ item.nombre }} {{ item.cliente.nombre }}</td>
                     <td>{{ item.renta }}</td>
                     <td>{{ item.fecha_inicio }}</td>
                     <td>{{ item.fecha_final }}</td>
